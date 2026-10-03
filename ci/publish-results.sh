@@ -36,7 +36,11 @@ for dir in results/logs-*/; do
   if [ -d "$dir/logs" ]; then
     mkdir -p "$work/logs/$job"
     for f in "$dir"/logs/*; do
-      [ -f "$f" ] && tail -n 400 "$f" > "$work/logs/$job/$(basename "$f")"
+      [ -f "$f" ] || continue
+      case "$f" in
+        *.png) cp "$f" "$work/logs/$job/" ;;
+        *)     tail -n 400 "$f" > "$work/logs/$job/$(basename "$f")" ;;
+      esac
     done
   fi
 done

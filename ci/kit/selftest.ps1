@@ -31,6 +31,14 @@ public static class WinUHidNative
     public static extern bool GetCursorPos(out POINT point);
     [DllImport("user32.dll")]
     public static extern short GetAsyncKeyState(int virtualKey);
+    [DllImport("user32.dll")]
+    public static extern int GetSystemMetrics(int index);
+
+    // True when this program runs inside a Remote Desktop session.
+    public static bool IsRemoteSession()
+    {
+        return GetSystemMetrics(0x1000) != 0;   // SM_REMOTESESSION
+    }
 
     // Returns {x, y}, or null when this session has no pointer to read.
     public static int[] CursorPosition()
@@ -138,6 +146,18 @@ try {
     $env:PATH = "$libDir;$env:PATH"
     [void][WinUHidNative]::SetDllDirectoryW($libDir)
 
+    # Virtual devices behave like hardware plugged into the machine: their input goes to the
+    # physical console session. A Remote Desktop session has its own input path and does not see it.
+    $remote = [WinUHidNative]::IsRemoteSession()
+    $remoteHint = ''
+    if ($remote) {
+        Info 'This is a Remote Desktop session. Devices can be created here, but their input goes to'
+        Info 'the physical console, not to this session, so the pointer/key observations will not show it.'
+        $remoteHint = ' Expected in a Remote Desktop session.'
+    } else {
+        Info 'This is the console session.'
+    }
+
     # --- 1. Driver is installed and reachable --------------------------------------------------
     $GENERIC_READ_WRITE = [uint32]3221225472   # GENERIC_READ | GENERIC_WRITE
     $handle = [WinUHidNative]::CreateFileW('\\.\WinUHid', $GENERIC_READ_WRITE, 3, [IntPtr]::Zero, 3, 0, [IntPtr]::Zero)
@@ -181,7 +201,7 @@ try {
             if (-not $accepted) { Fail 'The driver rejected the motion report.' }
             elseif (-not $p0 -or -not $p1) { Warn 'Motion report accepted, but this session has no pointer to observe.' }
             elseif ($p1[0] -ne $p0[0]) { Pass "Pointer really moved: x $($p0[0]) -> $($p1[0])." }
-            else { Warn "Motion report accepted, but the pointer did not move (x stayed at $($p0[0]))." }
+            else { Warn "Motion report accepted, but the pointer did not move (x stayed at $($p0[0])).$remoteHint" }
             [void][WinUHidNative]::WinUHidMouseReportMotion($mouse, [int16](-$dx), 0)
 
             # Something to watch: the pointer draws a small square.
@@ -242,7 +262,7 @@ try {
                 if (-not $sentDown -or -not $sentUp) { Fail 'The driver rejected a keyboard report.' }
                 elseif ($idle) { Warn 'Keyboard reports accepted; Left Shift was already held, so the effect could not be observed.' }
                 elseif ($held -and $released) { Pass 'Key press really arrived: Windows saw Left Shift go down and up.' }
-                else { Warn "Keyboard reports accepted, but Windows did not show the key (down seen=$held, up seen=$released)." }
+                else { Warn "Keyboard reports accepted, but this session did not see the key (down seen=$held, up seen=$released).$remoteHint" }
             } finally {
                 [void][WinUHidNative]::WinUHidSubmitInputReport($keyboard, $allUp, 8)
                 [WinUHidNative]::WinUHidDestroyDevice($keyboard)

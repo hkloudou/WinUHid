@@ -14,12 +14,64 @@ if (Test-Path (Join-Path $KitDir 'BUILD.txt')) {
     Get-Content (Join-Path $KitDir 'BUILD.txt') | ForEach-Object { Add-Report "- kit: $_" }
 }
 
+function Save-HangEvidence {
+    # When something does not return, record what is running and what is on screen.
+    param([string]$Tag)
+    Get-CimInstance Win32_Process |
+        Where-Object { $_.Name -match '^(msiexec|cmd|powershell|pwsh|certutil|rundll32|drvinst|pnputil|WUDFHost|consent|dllhost)\.exe$' } |
+        ForEach-Object { "$($_.ProcessId) (parent $($_.ParentProcessId), session $($_.SessionId)) $($_.Name): $($_.CommandLine)" } |
+        Out-File -FilePath (Join-Path $LogDir "$Tag-processes.txt") -Encoding utf8
+    Get-Process | Where-Object { $_.MainWindowTitle } |
+        ForEach-Object { "$($_.Id) $($_.ProcessName): $($_.MainWindowTitle)" } |
+        Out-File -FilePath (Join-Path $LogDir "$Tag-windows.txt") -Encoding utf8
+    try {
+        Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+        $bounds = [System.Windows.Forms.SystemInformation]::VirtualScreen
+        $bitmap = [System.Drawing.Bitmap]::new($bounds.Width, $bounds.Height)
+        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+        $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+        $bitmap.Save((Join-Path $LogDir "$Tag-screen.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+        $graphics.Dispose(); $bitmap.Dispose()
+    } catch {
+        Add-Report "- screenshot failed: $($_.Exception.Message)"
+    }
+}
+
+function Invoke-WithTimeout {
+    # Runs a program with its output going to a file, and gives up after the timeout.
+    # Returns the exit code, or -1 when it had to be stopped.
+    param([string]$FilePath, [string[]]$Arguments, [string]$LogName, [int]$TimeoutSeconds = 240)
+    $logPath = Join-Path $LogDir $LogName
+    $p = Start-Process -FilePath $FilePath -ArgumentList $Arguments -NoNewWindow -PassThru `
+        -RedirectStandardOutput $logPath -RedirectStandardError "$logPath.stderr"
+    $null = $p.Handle   # keeps the exit code readable after the process ends
+    if (-not $p.WaitForExit($TimeoutSeconds * 1000)) {
+        $tag = [System.IO.Path]::GetFileNameWithoutExtension($LogName) + '-hang'
+        Save-HangEvidence -Tag $tag
+        & taskkill.exe /PID $p.Id /T /F 2>&1 | Out-Null
+        Add-Content -Path $logPath -Value "TIMED OUT after $TimeoutSeconds seconds and was stopped."
+        Get-Content -Path $logPath -ErrorAction SilentlyContinue | Out-Host
+        return -1
+    }
+    $p.WaitForExit()
+    Get-Content -Path $logPath -ErrorAction SilentlyContinue | Out-Host
+    if ((Test-Path "$logPath.stderr") -and (Get-Item "$logPath.stderr").Length -eq 0) { Remove-Item "$logPath.stderr" }
+    return $p.ExitCode
+}
+
 function Invoke-KitScript {
     # Runs one of the kit's .cmd files, keeps its output as a log, returns its exit code.
     param([string]$Name, [string]$LogName)
-    $logPath = Join-Path $LogDir $LogName
-    & cmd.exe /c (Join-Path $KitDir $Name) 2>&1 | ForEach-Object { "$_" } | Tee-Object -FilePath $logPath | Out-Host
-    return $LASTEXITCODE
+    return Invoke-WithTimeout -FilePath 'cmd.exe' -Arguments '/c', "`"$(Join-Path $KitDir $Name)`"" -LogName $LogName
+}
+
+function Copy-MsiLog {
+    # Windows Installer writes UTF-16 logs; keep a UTF-8 copy so the tail of it stays readable.
+    param([string]$Source, [string]$LogName)
+    if (Test-Path $Source) {
+        Get-Content -Path $Source -Encoding Unicode -ErrorAction SilentlyContinue |
+            Set-Content -Path (Join-Path $LogDir $LogName) -Encoding utf8
+    }
 }
 
 function Get-ControlDevice {
@@ -42,7 +94,7 @@ Add-Report "## Install (install.cmd)"
 $rc = Invoke-KitScript 'install.cmd' '10-install-cmd.txt'
 Add-Notice 'install.cmd' "exit code $rc"
 if ($rc -ne 0) { $failed = $true }
-Copy-Item (Join-Path $KitDir 'install.log') (Join-Path $LogDir '11-msi-install.log') -ErrorAction SilentlyContinue
+Copy-MsiLog (Join-Path $KitDir 'install.log') '11-msi-install.log'
 
 $device = Get-ControlDevice
 if ($device) {
@@ -78,31 +130,33 @@ if (Test-Path $setupLog) {
 # --- 4. uninstall.cmd -----------------------------------------------------------------------
 Add-Report "## Uninstall (uninstall.cmd)"
 $rc = Invoke-KitScript 'uninstall.cmd' '40-uninstall-cmd.txt'
-Copy-Item (Join-Path $KitDir 'uninstall.log') (Join-Path $LogDir '41-msi-uninstall.log') -ErrorAction SilentlyContinue
+Copy-MsiLog (Join-Path $KitDir 'uninstall.log') '41-msi-uninstall.log'
 $deviceLeft = [bool](Get-ControlDevice)
 $rootLeft   = Test-CertInStore 'Root'
 $pubLeft    = Test-CertInStore 'TrustedPublisher'
 Add-Notice 'uninstall.cmd' "exit code $rc; control device left=$deviceLeft; test certificate left in Root=$rootLeft, in TrustedPublisher=$pubLeft"
 if ($rc -ne 0 -or $deviceLeft -or $rootLeft -or $pubLeft) { $failed = $true }
 
-# --- 5. What if the tester skips the certificate step? (informational) ----------------------
-Add-Report "## Install without trusting the certificate"
-$log = Join-Path $LogDir '50-msi-install-untrusted.log'
-$p = Start-Process -FilePath msiexec.exe -ArgumentList '/i', "`"$msi`"", '/qn', '/norestart', '/l*v', "`"$log`"" -Wait -PassThru
-$verdict = if ($p.ExitCode -eq 0) { 'INSTALLED even though the certificate is not trusted' } else { 'refused' }
-Add-Notice 'Install without trusting the certificate' "msiexec exit code $($p.ExitCode): $verdict"
-if ($p.ExitCode -eq 0) {
-    $p = Start-Process -FilePath msiexec.exe -ArgumentList '/x', "`"$msi`"", '/qn', '/norestart' -Wait -PassThru
-    Add-Report "- cleanup uninstall: msiexec exit code $($p.ExitCode)"
+Add-Notice 'Install test result' $(if ($failed) { 'FAILED - see the checks above' } else { 'all checks passed' })
+
+# --- 5. What if the certificate step is skipped? --------------------------------------------
+# Informational and deliberately last: without the certificate step the installer does not
+# fail, it stops inside its driver install step and never returns, so it has to be abandoned.
+# That leaves this (throwaway) machine half-installed.
+Add-Report "## Install without trusting the certificate (informational)"
+$log = Join-Path $env:RUNNER_TEMP 'msi-install-untrusted.log'
+$rc = Invoke-WithTimeout -FilePath 'msiexec.exe' -Arguments '/i', "`"$msi`"", '/qn', '/norestart', '/l*v', "`"$log`"" `
+    -LogName '50-msiexec-untrusted.txt' -TimeoutSeconds 60
+$verdict = switch ($rc) {
+    0       { 'INSTALLED silently even though the certificate is not trusted' }
+    -1      { 'did not complete within 60 seconds and was abandoned' }
+    default { 'refused' }
 }
+Add-Notice 'Install without trusting the certificate' "msiexec exit code ${rc}: $verdict"
+Copy-MsiLog $log '50-msi-install-untrusted.log'
 if (Test-Path $setupLog) {
     Get-Content -Path $setupLog -Tail 150 | Out-File -FilePath (Join-Path $LogDir '51-setupapi-dev-tail-untrusted.log') -Encoding utf8
 }
-if (Get-ControlDevice) {
-    Add-Notice 'Leftover' 'control device still present after the untrusted attempt'
-    $failed = $true
-}
 
-Add-Notice 'Install test result' $(if ($failed) { 'FAILED - see the checks above' } else { 'all checks passed' })
 if ($failed) { exit 1 }
 exit 0

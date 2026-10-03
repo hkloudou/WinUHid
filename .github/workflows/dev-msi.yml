@@ -171,15 +171,11 @@ jobs:
         RESULT_INSTALL: ${{ needs.install-test.result }}
       run: ./ci/publish-results.sh
 
-    # Temporary: removes the branches and runs left over from setting this pipeline up.
+    # Temporary: removes the runs left over from setting this pipeline up.
     - name: One-off cleanup
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        for branch in ci/dev-msi ci-results/windows-2022 ci-results/windows-latest; do
-          gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$branch" --silent \
-            && echo "deleted branch $branch" || echo "branch $branch was not deleted"
-        done
         gh run list --repo "$GITHUB_REPOSITORY" --limit 100 --json databaseId,status \
           --jq '.[] | select(.status == "completed") | .databaseId' | while read -r id; do
           if [ "$id" != "$GITHUB_RUN_ID" ]; then
