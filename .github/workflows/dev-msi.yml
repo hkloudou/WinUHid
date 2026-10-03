@@ -152,7 +152,6 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
-      actions: write
 
     steps:
     - name: Checkout repository
@@ -170,18 +169,6 @@ jobs:
         RESULT_BUILD: ${{ needs.build.result }}
         RESULT_INSTALL: ${{ needs.install-test.result }}
       run: ./ci/publish-results.sh
-
-    # Temporary: removes the runs left over from setting this pipeline up.
-    - name: One-off cleanup
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh run list --repo "$GITHUB_REPOSITORY" --limit 100 --json databaseId,status \
-          --jq '.[] | select(.status == "completed") | .databaseId' | while read -r id; do
-          if [ "$id" != "$GITHUB_RUN_ID" ]; then
-            gh run delete "$id" --repo "$GITHUB_REPOSITORY" && echo "deleted run $id" || true
-          fi
-        done
 
   release:
     name: Refresh the dev-test pre-release
