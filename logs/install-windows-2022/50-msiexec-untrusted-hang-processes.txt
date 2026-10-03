@@ -1,0 +1,8 @@
+4952 (parent 1000, session 0) dllhost.exe: C:\Windows\system32\DllHost.exe /Processid:{3EB3C877-1F16-487C-9050-104DBCD66683}
+5556 (parent 7476, session 2) pwsh.exe: "C:\Program Files\PowerShell\7\pwsh.EXE" -command ". 'D:\a\_temp\0e278699-bfc4-4b5e-be0c-cb5d72cecd3f.ps1'"
+2780 (parent 848, session 0) msiexec.exe: C:\Windows\system32\msiexec.exe /V
+3976 (parent 5556, session 2) msiexec.exe: "C:\Windows\system32\msiexec.exe" /i "D:\a\WinUHid\WinUHid\out\kit\WinUHid-dev-test-x64.msi" /qn /norestart /l*v "D:\a\_temp\msi-install-untrusted.log"
+1084 (parent 2780, session 2) msiexec.exe: C:\Windows\System32\MsiExec.exe -Embedding 990520CA783D66B609D1A6F91467B546
+7280 (parent 2780, session 2) msiexec.exe: C:\Windows\System32\MsiExec.exe -Embedding BFF87332CAD2BF0A2D46CDAF85804F25 E Global\MSI0000
+4736 (parent 8052, session 0) drvinst.exe: DrvInst.exe "4" "0" "C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.inf" "9" "4670b381b" "00000000000001A0" "WinSta0\Default" "00000000000001B0" "208" "C:\Program Files\WinUHid"
+2468 (parent 4736, session 2) rundll32.exe: rundll32.exe C:\Windows\system32\pnpui.dll,InstallSecurityPromptRunDllW 10 Global\{62988F98-ABD1-4C68-A256-36D13B2CADE5} Global\{E4D17F1E-5DA3-4C11-9422-653FA7FFD141} C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.inf C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.cat

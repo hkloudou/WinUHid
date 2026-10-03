@@ -1,0 +1,2 @@
+8284 rundll32: Windows Security
+3596 WindowsTerminal: C:\ProgramData\GitHub\HostedComputeAgent\hosted-compute-agent

@@ -1,0 +1,36 @@
+﻿Build started 10/3/2026 7:45:31 AM.
+Logging verbosity is set to: Normal.
+     1>Project "D:\a\WinUHid\WinUHid\Installer\RootDevCA\RootDevCA.vcxproj" on node 1 (default targets).
+     1>PrepareForBuild:
+         Creating directory "x64\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\RootDevCA.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\RootDevCA.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\RootDevCA.tlog\unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\WinUHid\WinUHid\packages\WixToolset.DUtil.6.0.0\build\native\include\ /ID:\a\WinUHid\WinUHid\packages\WixToolset.WcaUtil.6.0.0\build\native\include\ /Zi /nologo /W3 /WX- /diagnostics:column /sdl /O2 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /guard:cf /Gy /fp:precise /guard:ehcont /Zc:wchar_t /Zc:forScope /Zc:inline /permissive- /Yc"pch.h" /Fp"x64\Release\RootDevCA.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:queue pch.cpp
+         pch.cpp
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /ID:\a\WinUHid\WinUHid\packages\WixToolset.DUtil.6.0.0\build\native\include\ /ID:\a\WinUHid\WinUHid\packages\WixToolset.WcaUtil.6.0.0\build\native\include\ /Zi /nologo /W3 /WX- /diagnostics:column /sdl /O2 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /guard:cf /Gy /fp:precise /guard:ehcont /Zc:wchar_t /Zc:forScope /Zc:inline /permissive- /Yu"pch.h" /Fp"x64\Release\RootDevCA.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:queue RootDevCA.cpp dllmain.cpp
+         RootDevCA.cpp
+         dllmain.cpp
+       Link:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.dll" /NOLOGO msi.lib version.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib D:\a\WinUHid\WinUHid\packages\WixToolset.DUtil.6.0.0\build\native\v14\x64\dutil.lib D:\a\WinUHid\WinUHid\packages\WixToolset.WcaUtil.6.0.0\build\native\v14\x64\wcautil.lib /DEF:"RootDevCA.def" /MANIFEST /MANIFESTUAC:NO /manifest:embed /DEBUG /PDB:"D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\RootDevCA.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.lib" /MACHINE:X64 /CETCOMPAT /guard:cf /guard:ehcont /DLL x64\Release\RootDevCA.obj
+         x64\Release\dllmain.obj
+         x64\Release\pch.obj
+            Creating library D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.lib and object D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.exp
+         Generating code
+         Previous IPDB not found, fall back to full compilation.
+         All 91 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Finished generating code
+         RootDevCA.vcxproj -> D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.dll
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\RootDevCA.tlog\unsuccessfulbuild".
+         Touching "x64\Release\RootDevCA.tlog\RootDevCA.lastbuildstate".
+     1>Done Building Project "D:\a\WinUHid\WinUHid\Installer\RootDevCA\RootDevCA.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.09

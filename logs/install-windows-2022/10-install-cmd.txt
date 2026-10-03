@@ -1,0 +1,16 @@
+
+ ======================================================================
+  注意：这是测试版本，驱动用的是自签名的测试证书，不是正式签名。
+  只能安装在测试机上。请勿分发给用户，请勿用于生产环境。
+
+  NOTICE: this is a TEST build. The driver is signed with a self-signed
+  test certificate, not a production signature.
+  Install it on test machines only. Do NOT distribute it to users.
+ ======================================================================
+
+[1/3] Trusting this build's test certificate...
+[2/3] Installing the driver package...
+[3/3] Looking for the control device...
+
+ OK - installed. Next step: run selftest.cmd
+

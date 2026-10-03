@@ -1,0 +1,150 @@
+     dvi: {DIF_REMOVE} 07:47:56.495
+     dvi:      Default installer: Enter 07:47:56.495
+     dvi:           {Remove DEVICE}
+     dvi:                {Delete Device - VHF\HID_DEVICE_SYSTEM_VHF\1&1B75122C&0&{457DB1BB-A264-5011-821B-FB97683B2F08}}
+     dvi:                {Delete Device - exit(0x00000000)}
+     dvi:           {Remove DEVICE exit (0x00000000)}
+     dvi:      Default installer: Exit
+     dvi: {DIF_REMOVE - exit(0x00000000)} 07:47:56.501
+     ndv: Uninstalling device 'VHF\HID_DEVICE_SYSTEM_VHF\1&1b75122c&0&{16989196-207b-5ec3-bd08-3d7b597e101c}'.
+     dvi: {DIF_REMOVE} 07:47:56.501
+     dvi:      Default installer: Enter 07:47:56.501
+     dvi:           {Remove DEVICE}
+     dvi:                {Delete Device - VHF\HID_DEVICE_SYSTEM_VHF\1&1B75122C&0&{16989196-207B-5EC3-BD08-3D7B597E101C}}
+     dvi:                {Delete Device - exit(0x00000000)}
+     dvi:           {Remove DEVICE exit (0x00000000)}
+     dvi:      Default installer: Exit
+     dvi: {DIF_REMOVE - exit(0x00000000)} 07:47:56.501
+     ndv: Uninstalling device 'VHF\HID_DEVICE_SYSTEM_VHF\1&1b75122c&0&{1072a5f0-d68e-5dc5-95bd-4a5a24182b7b}'.
+     dvi: {DIF_REMOVE} 07:47:56.501
+     dvi:      Default installer: Enter 07:47:56.501
+     dvi:           {Remove DEVICE}
+     dvi:                {Delete Device - VHF\HID_DEVICE_SYSTEM_VHF\1&1B75122C&0&{1072A5F0-D68E-5DC5-95BD-4A5A24182B7B}}
+     dvi:                {Delete Device - exit(0x00000000)}
+     dvi:           {Remove DEVICE exit (0x00000000)}
+     dvi:      Default installer: Exit
+     dvi: {DIF_REMOVE - exit(0x00000000)} 07:47:56.511
+     ndv: Uninstalling device 'ROOT\WINUHID\0000'.
+     dvi: {DIF_REMOVE} 07:47:56.511
+     dvi:      Default installer: Enter 07:47:56.511
+     dvi:           {Remove DEVICE}
+     dvi:                {Delete Device - ROOT\WINUHID\0000}
+     dvi:                     Query-and-Remove succeeded
+     dvi:                {Delete Device - exit(0x00000000)}
+     dvi:           {Remove DEVICE exit (0x00000000)}
+     dvi:      Default installer: Exit
+     dvi: {DIF_REMOVE - exit(0x00000000)} 07:47:56.511
+<<<  Section end 2026/10/03 07:47:56.511
+<<<  [Exit status: SUCCESS]
+
+
+>>>  [Driver Uninstall (DiUninstallDriver) - C:\Program Files\WinUHid\WinUHidDriver.inf]
+>>>  Section start 2026/10/03 07:47:56.527
+      cmd: C:\Windows\System32\MsiExec.exe -Embedding 43D92965021ADB7C9F29FE114CE95EF0 E Global\MSI0000
+     ndv: Flags: 0x00000000
+     ndv: INF path: C:\Program Files\WinUHid\WinUHidDriver.inf
+     dvs: {DrvSetupUninstallDriver - C:\Program Files\WinUHid\WinUHidDriver.inf}
+     dvs:      Flags: 0x00000000
+     dvs:      {Driver Setup Delete Driver Package: oem13.inf} 07:47:56.542
+     ump:           Delete flags: 0x00000002
+     pol:           {Driver package policy check} 07:47:56.542
+     pol:           {Driver package policy check - exit(0x00000000)} 07:47:56.542
+     sto:           {Unstage Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf} 07:47:56.542
+     sto:                {Core Driver Package Delete: winuhiddriver.inf_amd64_b6788703a169c635} 07:47:56.542
+     sto:                     {DRIVERSTORE DELETE BEGIN} 07:47:56.542
+     sto:                     {DRIVERSTORE DELETE BEGIN: exit(0x00000000)} 07:47:56.542
+     sto:                     {Unconfigure Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf}
+     inf:                          Class GUID     = {4d36e97d-e325-11ce-bfc1-08002be10318}
+     inf:                          Class Options  = Configurable BootCritical
+     inf:                          {Unconfigure Driver: WinUHid Virtual HID Enumerator}
+     inf:                               Section Name = WinUHid_Win10.NT
+     inf:                               {Add Service: WUDFRd}
+     inf:                                    Service 'WUDFRd' still in use by 8 sources.
+     inf:                               {Add Service: exit(0x00000000)}
+     inf:                               {Add Service: vhf}
+     inf:                                    Service 'vhf' still in use by 2 sources.
+     inf:                               {Add Service: exit(0x00000000)}
+     inf:                               AddReg: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\WdfMajorVersion
+     inf:                               AddReg: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\WdfMinorVersion
+     inf:                               AddReg: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\ImagePath
+     cpy:                               Skipping isolated file 'WinUHidDriver.dll'.
+     cpy:                               Cannot unconfigure inbox file 'C:\Windows\System32\DriverStore\FileRepository\hidvhf.inf_amd64_82d1d5210c639f2d\vhf.sys' from a non-inbox driver package.
+     inf:                               Hardware Id  = Root\WinUHid
+     inf:                          {Unconfigure Driver: exit(0x00000000)}
+     flq:                          {FILE_QUEUE_COMMIT} 07:47:56.559
+     flq:                          {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:47:56.559
+     sto:                     {Unconfigure Driver Package: exit(0x00000000)}
+     idb:                     {Unpublish Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf} 07:47:56.559
+     idb:                          Clearing active driver package 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     cpy:                          Unpublished 'oem13.inf'.
+     idb:                          Deindexed 2 device IDs for 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     sto:                          Flushed driver database node 'SYSTEM'. Time = 31 ms
+     idb:                     {Unpublish Driver Package: exit(0x00000000)} 07:47:56.589
+     idb:                     {Unregister Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf} 07:47:56.589
+     idb:                          Unregistered driver package 'winuhiddriver.inf_amd64_b6788703a169c635' from 'oem13.inf'.
+     idb:                          Deleted driver package object 'winuhiddriver.inf_amd64_b6788703a169c635' from SYSTEM database node.
+     idb:                          Deleted driver INF file object 'oem13.inf' from SYSTEM database node.
+     idb:                     {Unregister Driver Package: exit(0x00000000)} 07:47:56.589
+     cpy:                     {Delete Directory: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635} 07:47:56.589
+     cpy:                     {Delete Directory: exit(0x00000000)} 07:47:56.589
+     sto:                     {DRIVERSTORE DELETE END} 07:47:56.589
+     sig:                          Uninstalled catalog 'oem13.cat'.
+     sto:                     {DRIVERSTORE DELETE END: exit(0x00000000)} 07:47:56.605
+     sto:                {Core Driver Package Delete: exit(0x00000000)} 07:47:56.605
+     sto:           {Unstage Driver Package: exit(0x00000000)} 07:47:56.605
+     dvs:      {Driver Setup Delete Driver Package - exit (0x00000000)} 07:47:56.605
+     dvs: {DrvSetupUninstallDriver - exit(00000000)}
+<<<  Section end 2026/10/03 07:47:56.605
+<<<  [Exit status: SUCCESS]
+
+
+>>>  [Device Install (DiInstallDriver) - C:\Program Files\WinUHid\WinUHidDriver.inf]
+>>>  Section start 2026/10/03 07:47:57.277
+      cmd: C:\Windows\System32\MsiExec.exe -Embedding BFF87332CAD2BF0A2D46CDAF85804F25 E Global\MSI0000
+     ndv: Flags: 0x00000000
+     ndv: INF path: C:\Program Files\WinUHid\WinUHidDriver.inf
+     dvs: {DrvSetupInstallDriver - C:\Program Files\WinUHid\WinUHidDriver.inf}
+     dvs:      Flags: 0x00000000
+     dvs:      {Driver Setup Import Driver Package: C:\Program Files\WinUHid\WinUHidDriver.inf} 07:47:57.277
+     sto:           {Copy Driver Package: C:\Program Files\WinUHid\WinUHidDriver.inf} 07:47:57.277
+     sto:                Driver Package = C:\Program Files\WinUHid\WinUHidDriver.inf
+     sto:                Flags          = 0x00000007
+     sto:                Destination    = C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}
+     sto:                Copying driver package files to 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}'.
+     flq:                {FILE_QUEUE_COMMIT} 07:47:57.277
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.cat' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.cat'.
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.dll' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.dll'.
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.inf' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.inf'.
+     flq:                {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:47:57.292
+     sto:           {Copy Driver Package: exit(0x00000000)} 07:47:57.292
+     ump:           Import flags: 0x00000000
+     pol:           {Driver package policy check} 07:47:57.292
+     pol:           {Driver package policy check - exit(0x00000000)} 07:47:57.292
+     sto:           {Stage Driver Package: C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.inf} 07:47:57.292
+     inf:                {Query Configurability: C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.inf} 07:47:57.292
+     inf:                     Driver package uses WDF.
+     inf:                     Driver package 'WinUHidDriver.inf' is configurable.
+     inf:                {Query Configurability: exit(0x00000000)} 07:47:57.308
+     flq:                {FILE_QUEUE_COMMIT} 07:47:57.308
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.cat' to 'C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.cat'.
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.dll' to 'C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.dll'.
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{cfbe1204-90d8-ed48-a39d-5aa30aac28f4}\WinUHidDriver.inf' to 'C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.inf'.
+     flq:                {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:47:57.308
+     sto:                {DRIVERSTORE IMPORT VALIDATE} 07:47:57.308
+     sig:                     Driver package catalog is valid.
+     sig:                     {_VERIFY_FILE_SIGNATURE} 07:47:57.355
+     sig:                          Key      = WinUHidDriver.inf
+     sig:                          FilePath = C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.inf
+     sig:                          Catalog  = C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.cat
+!    sig:                          Verifying file against specific (valid) catalog failed.
+!    sig:                          Error 0x800b0109: A certificate chain processed, but terminated in a root certificate which is not trusted by the trust provider.
+     sig:                     {_VERIFY_FILE_SIGNATURE exit(0x800b0109)} 07:47:57.355
+     sig:                     {_VERIFY_FILE_SIGNATURE} 07:47:57.355
+     sig:                          Key      = WinUHidDriver.inf
+     sig:                          FilePath = C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.inf
+     sig:                          Catalog  = C:\Windows\System32\DriverStore\Temp\{9869b858-54b0-e540-bf69-4a61dd51f0c6}\WinUHidDriver.cat
+!    sig:                          Verifying file against specific Authenticode(tm) catalog failed.
+!    sig:                          Error 0x800b0109: A certificate chain processed, but terminated in a root certificate which is not trusted by the trust provider.
+     sig:                     {_VERIFY_FILE_SIGNATURE exit(0x800b0109)} 07:47:57.371
+<ins>
+��8g�� i�    

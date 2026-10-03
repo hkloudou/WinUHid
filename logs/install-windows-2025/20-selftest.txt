@@ -1,0 +1,22 @@
+[INFO] Microsoft Windows Server 2025 Datacenter, build 26100, PowerShell 5.1.26100.33438
+[INFO] kit: commit fd7f4e515bb0c4b9ea6f9bc289c0d1a992e5504a
+[INFO] kit: run    37107359106
+[INFO] Test mode: ON. This machine accepts test-signed drivers, so it does not prove a normal machine would.
+[INFO] Secure Boot: off.
+[INFO] This is the console session.
+[PASS] Control device \\.\WinUHid opened.
+[PASS] Driver interface version 1.
+[PASS] Virtual mouse created. Windows now lists:
+[INFO]     Mouse: HID-compliant mouse [HID\HID_DEVICE_SYSTEM_VHF\2&14545662&0&0000]
+[INFO]     HIDClass: Virtual HID Framework (VHF) HID device [VHF\HID_DEVICE_SYSTEM_VHF\1&1B75122C&0&{16989196-207B-5EC3-BD08-3D7B597E101C}]
+[PASS] Pointer really moved: x 512 -> 425.
+[INFO] Watch the pointer: it draws a small square.
+[PASS] Virtual mouse removed again.
+[PASS] Virtual keyboard created. Windows now lists:
+[INFO]     Keyboard: HID Keyboard Device [HID\HID_DEVICE_SYSTEM_VHF\2&3DE7D10&0&0000]
+[INFO]     HIDClass: Virtual HID Framework (VHF) HID device [VHF\HID_DEVICE_SYSTEM_VHF\1&1B75122C&0&{95CE5BA9-2052-5699-BEAB-909839B4CCB8}]
+[PASS] Key press really arrived: Windows saw Left Shift go down and up.
+[PASS] Virtual keyboard removed again.
+
+RESULT: OK
+

@@ -1,0 +1,7 @@
+2026/10/03 07:47:32 another copy was running; asked it to quit and waiting for it to let go
+2026/10/03 07:47:33 virtual keyboard, relative mouse and absolute mouse created (pid 4752, session 2, console session 2)
+2026/10/03 07:47:35 listening on http://127.0.0.1:8765/
+2026/10/03 07:47:35 FOR FEASIBILITY TESTS AND LEARNING ONLY: no authentication, no encryption. Do not distribute or deploy it.
+2026/10/03 07:47:37 asked to quit over HTTP
+2026/10/03 07:47:37 removing the virtual devices
+2026/10/03 07:47:37 stopped

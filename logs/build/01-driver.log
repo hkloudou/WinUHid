@@ -1,0 +1,88 @@
+﻿Build started 10/3/2026 7:45:13 AM.
+Logging verbosity is set to: Normal.
+     1>Project "D:\a\WinUHid\WinUHid\WinUHid Driver\WinUHid Driver.vcxproj" on node 1 (default targets).
+     1>DriverBuildNotifications:
+         Building 'WinUHid Driver' with toolset 'WindowsUserModeDriver10.0' and the 'Universal' target platform.
+         Using UMDF 2.15.
+       PrepareForBuild:
+         Creating directory "x64\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "D:\a\WinUHid\WinUHid\build\Release\x64\".
+         Creating directory "x64\Release\WinUHid Driver.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\WinUHid Driver.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\WinUHid Driver.tlog\unsuccessfulbuild".
+       StampInf:
+         C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x86\stampinf.exe -d "*" -a "amd64" -v "*" -u "2.15.0"  -x -f x64\Release\WinUHidDriver.inf 
+         Copying "D:\a\WinUHid\WinUHid\WinUHid Driver\WinUHidDriver.inf" to "x64\Release\WinUHidDriver.inf" for stamping
+         Stamping x64\Release\WinUHidDriver.inf
+         Stamping [Version] section with DriverVer=10/03/2026,7.45.14.582
+         Copying file from "D:\a\WinUHid\WinUHid\WinUHid Driver\x64\Release\WinUHidDriver.inf" to "D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.inf".
+       RunWpp:
+         C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x86\tracewpp.exe -cfgdir:"C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\wppconfig\rev1" -scan:"trace.h" -odir:"x64\Release\\" -dll WinUHid.c 
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /Ix64\Release\ /Zi /nologo /W4 /WX /diagnostics:column /Ox /Os /Oy- /GL /D _WIN64 /D _AMD64_ /D AMD64 /D WIN32_LEAN_AND_MEAN=1 /D _WIN32_WINNT=0x0A00 /D WINVER=0x0A00 /D WINNT=1 /D NTDDI_VERSION=0xA000010 /D _WINDLL /D UMDF_VERSION_MAJOR=2 /D UMDF_VERSION_MINOR=15 /D UMDF_USING_NTSTATUS /D _UNICODE /D UNICODE /D WPP_MACRO_USE_KM_VERSION_FOR_UM=1 /D ENABLE_WPP_RECORDER=1 /GF /Gm- /MT /Zp8 /GS /guard:cf /Gy /fp:precise /Qspectre /guard:ehcont /Zc:wchar_t- /Zc:forScope /Zc:inline /GR- /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W4 /Gz /wd4603 /wd4627 /wd4986 /wd4987 /FI"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared\warning.h" /FC /errorReport:queue /D_ATL_NO_WIN_SUPPORT  /d1nodatetime /d1import_no_registry /d2AllowCompatibleILVersions /d2Zi+ WinUHid.c
+         WinUHid.c
+       Link:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.dll" /VERSION:"10.0" /INCREMENTAL:NO /NOLOGO /WX /SECTION:"INIT,d" "C:\Program Files (x86)\Windows Kits\10\lib\wdf\umdf\x64\2.15\WdfDriverStubUm.lib" ntdll.lib OneCoreUAP.lib ucrt.lib "C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\um\x64\wpprecorderum.lib" /NODEFAULTLIB:kernel32.lib /NODEFAULTLIB:user32.lib /NODEFAULTLIB:libucrt.lib /MANIFEST:NO /DEBUG /PDB:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.pdb" /SUBSYSTEM:WINDOWS,"10.00" /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\WinUHidDriver.iobj" /RELEASE /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.lib" /MERGE:"_TEXT=.text;_PAGE=PAGE" /MACHINE:X64 /PROFILE /CETCOMPAT /guard:cf /guard:ehcont /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221,4108,4088,4218,4218,4235 /osversion:10.0 /pdbcompress /debugtype:pdata /DLL x64\Release\WinUHid.obj
+            Creating library D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.lib and object D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.exp
+         Generating code
+         Previous IPDB not found, fall back to full compilation.
+         All 77 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Finished generating code
+         WinUHid Driver.vcxproj -> D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.dll
+       ApiValidator:
+         Validating 'Universal' driver using ApiValidator.exe
+         cmd.exe /D /C "C:\Users\runneradmin\AppData\Local\Temp\MSBuildTemp\tmpa7882094ee474f898b3e87dc98542714.cmd"
+         "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\ApiValidator.exe" -DriverPackagePath:D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.dll -SupportedApiXmlFiles:"C:\Program Files (x86)\Windows Kits\10\build\10.0.26100.0\universalDDIs\x64\UniversalDDIs.xml" -ModuleWhiteListXmlFiles:"C:\Program Files (x86)\Windows Kits\10\build\10.0.26100.0\universalDDIs\x64\ModuleWhiteList.xml" -ApiExtractorExePath:"C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64" 
+         Driver is 'Universal'.
+       DriverPackageTarget:
+         Packaging up the following projects for the following configurations:
+         
+          Configuration='' Platform=''
+         
+         
+         The following files will be packaged:
+         
+         File to package:      D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.dll.
+         Location in Package:  \WinUHidDriver.dll.
+         Requested by project: 
+         
+         
+         File to package:      x64\Release\WinUHidDriver.inf.
+         Location in Package:  \WinUHidDriver.inf.
+         Requested by project: 
+         
+         
+         Creating directory "D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid Driver".
+         Copying file from "D:\a\WinUHid\WinUHid\WinUHid Driver\x64\Release\WinUHidDriver.inf" to "D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid Driver\WinUHidDriver.inf".
+         Copying file from "D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.dll" to "D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid Driver\WinUHidDriver.dll".
+       Inf2Cat:
+         C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x86\inf2cat.exe /os:10_x64 /driver:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid Driver\\" 
+         ........................
+         Signability test complete.
+         
+         Errors:
+         None
+         
+         Warnings:
+         None
+         
+         Catalog generation complete.
+         D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid Driver\winuhiddriver.cat
+       DrvCat:
+         C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\drvcat.exe  "D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid Driver\winuhiddriver.cat" /set WdkVersion 10.0.26100.0 /set WdkAssemblyVersion 10.0.26100.4202 
+         Set catalog attribute.
+         WdkVersion: 10.0.26100.0
+         Set catalog attribute.
+         WdkAssemblyVersion: 10.0.26100.4202
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\WinUHid Driver.tlog\unsuccessfulbuild".
+         Touching "x64\Release\WinUHid Driver.tlog\WinUHid Driver.lastbuildstate".
+     1>Done Building Project "D:\a\WinUHid\WinUHid\WinUHid Driver\WinUHid Driver.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:08.23

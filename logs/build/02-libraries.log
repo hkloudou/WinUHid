@@ -1,0 +1,69 @@
+﻿Build started 10/3/2026 7:45:24 AM.
+Logging verbosity is set to: Normal.
+     1>Project "D:\a\WinUHid\WinUHid\WinUHidDevs\WinUHidDevs.vcxproj" on node 1 (default targets).
+     1>Project "D:\a\WinUHid\WinUHid\WinUHidDevs\WinUHidDevs.vcxproj" (1) is building "D:\a\WinUHid\WinUHid\WinUHid\WinUHid.vcxproj" (2) on node 1 (default targets).
+     2>PrepareForBuild:
+         Creating directory "x64\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\WinUHid.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\WinUHid.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\WinUHid.tlog\unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /Zi /nologo /W3 /WX- /diagnostics:column /sdl /O2 /Oi /GL /D NDEBUG /D WINUHID_EXPORTS /D _WINDOWS /D _USRDLL /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /guard:cf /Gy /fp:precise /guard:ehcont /Zc:wchar_t /Zc:forScope /Zc:inline /permissive- /Yc"pch.h" /Fp"x64\Release\WinUHid.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:queue pch.cpp
+         pch.cpp
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /Zi /nologo /W3 /WX- /diagnostics:column /sdl /O2 /Oi /GL /D NDEBUG /D WINUHID_EXPORTS /D _WINDOWS /D _USRDLL /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /guard:cf /Gy /fp:precise /guard:ehcont /Zc:wchar_t /Zc:forScope /Zc:inline /permissive- /Yu"pch.h" /Fp"x64\Release\WinUHid.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:queue WinUHid.cpp
+         WinUHid.cpp
+       Link:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:NO /manifest:embed /DEBUG /PDB:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\WinUHid.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.lib" /MACHINE:X64 /CETCOMPAT /guard:cf /guard:ehcont /DLL x64\Release\pch.obj
+         x64\Release\WinUHid.obj
+            Creating library D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.lib and object D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.exp
+         Generating code
+         Previous IPDB not found, fall back to full compilation.
+         All 38 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Finished generating code
+         WinUHid.vcxproj -> D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.dll
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\WinUHid.tlog\unsuccessfulbuild".
+         Touching "x64\Release\WinUHid.tlog\WinUHid.lastbuildstate".
+     2>Done Building Project "D:\a\WinUHid\WinUHid\WinUHid\WinUHid.vcxproj" (default targets).
+     1>PrepareForBuild:
+         Creating directory "x64\Release\".
+         Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
+         Creating directory "x64\Release\WinUHidDevs.tlog\".
+       InitializeBuildStatus:
+         Creating "x64\Release\WinUHidDevs.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "x64\Release\WinUHidDevs.tlog\unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /Zi /nologo /W3 /WX- /diagnostics:column /sdl /O2 /Oi /GL /D NDEBUG /D WINUHID_EXPORTS /D _WINDOWS /D _USRDLL /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /guard:cf /Gy /fp:precise /guard:ehcont /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++20 /permissive- /Yc"pch.h" /Fp"x64\Release\WinUHidDevs.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:queue pch.cpp
+         pch.cpp
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /Zi /nologo /W3 /WX- /diagnostics:column /sdl /O2 /Oi /GL /D NDEBUG /D WINUHID_EXPORTS /D _WINDOWS /D _USRDLL /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /guard:cf /Gy /fp:precise /guard:ehcont /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++20 /permissive- /Yu"pch.h" /Fp"x64\Release\WinUHidDevs.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:queue WinUHidDevs.cpp WinUHidMouse.cpp WinUHidPS4.cpp WinUHidPS5.cpp WinUHidXOne.cpp
+         WinUHidDevs.cpp
+         WinUHidMouse.cpp
+         WinUHidPS4.cpp
+         WinUHidPS5.cpp
+         WinUHidXOne.cpp
+       Link:
+         C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDevs.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:NO /manifest:embed /DEBUG /PDB:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDevs.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\WinUHidDevs.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDevs.lib" /MACHINE:X64 /CETCOMPAT /guard:cf /guard:ehcont /DLL x64\Release\pch.obj
+         x64\Release\WinUHidDevs.obj
+         x64\Release\WinUHidMouse.obj
+         x64\Release\WinUHidPS4.obj
+         x64\Release\WinUHidPS5.obj
+         x64\Release\WinUHidXOne.obj
+         D:\a\WinUHid\WinUHid\build\Release\x64\WinUHid.lib
+            Creating library D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDevs.lib and object D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDevs.exp
+         Generating code
+         Previous IPDB not found, fall back to full compilation.
+         All 52 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Finished generating code
+         WinUHidDevs.vcxproj -> D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDevs.dll
+       FinalizeBuildStatus:
+         Deleting file "x64\Release\WinUHidDevs.tlog\unsuccessfulbuild".
+         Touching "x64\Release\WinUHidDevs.tlog\WinUHidDevs.lastbuildstate".
+     1>Done Building Project "D:\a\WinUHid\WinUHid\WinUHidDevs\WinUHidDevs.vcxproj" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:06.83

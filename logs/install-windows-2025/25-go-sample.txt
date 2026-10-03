@@ -1,0 +1,11 @@
+[INFO] Libraries loaded from D:\a\WinUHid\WinUHid\out\kit\lib
+[PASS] Driver reachable, interface version 1.
+[PASS] Virtual mouse created.
+[PASS] Pointer really moved: x 565 -> 497.
+[INFO] Watch the pointer: it draws a small square.
+[PASS] Mouse wheel reports accepted (one notch up, one notch down).
+[PASS] Left button press really arrived, as the left button.
+[PASS] Virtual keyboard created.
+[PASS] Key press really arrived: Windows saw Left Shift go down and up.
+
+RESULT: OK

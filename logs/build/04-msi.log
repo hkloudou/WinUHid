@@ -1,0 +1,30 @@
+﻿Build started 10/3/2026 7:45:34 AM.
+Logging verbosity is set to: Normal.
+     1>Project "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\WinUHid Package.wixproj" on node 1 (default targets).
+     1>PrepareForBuild:
+         Creating directory "bin\x64\Release\".
+         Creating directory "obj\x64\Release\".
+       AssignTargetPaths:
+         Culture: en-US
+       CoreCompile:
+         C:\Users\runneradmin\.nuget\packages\wixtoolset.sdk\6.0.0\tools\net472\x64\wix.exe build -platform x64 -out "obj\x64\Release\en-US\WinUHid Package.msi" -outputType Package -pdb "obj\x64\Release\en-US\WinUHid Package.wixpdb" -pdbType full -culture en-US -d SolutionDir=D:\a\WinUHid\WinUHid\ -d Configuration=Release -d OutDir=bin\x64\Release\ -d InstallerPlatform=x64 -d Platform=x64 -d "ProjectDir=D:\a\WinUHid\WinUHid\Installer\WinUHid Package\\" -d ProjectExt=.wixproj -d "ProjectFileName=WinUHid Package.wixproj" -d "ProjectName=WinUHid Package" -d "ProjectPath=D:\a\WinUHid\WinUHid\Installer\WinUHid Package\WinUHid Package.wixproj" -d "TargetDir=D:\a\WinUHid\WinUHid\Installer\WinUHid Package\bin\x64\Release\\" -d TargetExt=.msi -d "TargetFileName=WinUHid Package.msi" -d "TargetName=WinUHid Package" -d "TargetPath=D:\a\WinUHid\WinUHid\Installer\WinUHid Package\bin\x64\Release\WinUHid Package.msi" -d RootDevCA.Configuration= -d RootDevCA.FullConfiguration= -d RootDevCA.Platform= -d RootDevCA.ProjectDir=D:\a\WinUHid\WinUHid\Installer\RootDevCA\ -d RootDevCA.ProjectExt=.vcxproj -d RootDevCA.ProjectFileName=RootDevCA.vcxproj -d RootDevCA.ProjectName=RootDevCA -d RootDevCA.ProjectPath=D:\a\WinUHid\WinUHid\Installer\RootDevCA\RootDevCA.vcxproj -d RootDevCA.TargetDir=D:\a\WinUHid\WinUHid\build\Release\x64\ -d RootDevCA.TargetExt=.dll -d RootDevCA.TargetFileName=RootDevCA.dll -d RootDevCA.TargetName=RootDevCA -d RootDevCA.TargetPath=D:\a\WinUHid\WinUHid\build\Release\x64\RootDevCA.dll -d WinUHid_Driver.Configuration= -d WinUHid_Driver.FullConfiguration= -d WinUHid_Driver.Platform= -d "WinUHid_Driver.ProjectDir=D:\a\WinUHid\WinUHid\WinUHid Driver\\" -d WinUHid_Driver.ProjectExt=.vcxproj -d "WinUHid_Driver.ProjectFileName=WinUHid Driver.vcxproj" -d "WinUHid_Driver.ProjectName=WinUHid Driver" -d "WinUHid_Driver.ProjectPath=D:\a\WinUHid\WinUHid\WinUHid Driver\WinUHid Driver.vcxproj" -d WinUHid_Driver.TargetDir=D:\a\WinUHid\WinUHid\build\Release\x64\ -d WinUHid_Driver.TargetExt=.dll -d WinUHid_Driver.TargetFileName=WinUHidDriver.dll -d WinUHid_Driver.TargetName=WinUHidDriver -d WinUHid_Driver.TargetPath=D:\a\WinUHid\WinUHid\build\Release\x64\WinUHidDriver.dll -ext C:\Users\runneradmin\.nuget\packages\wixtoolset.iis.wixext\6.0.0\wixext6\WixToolset.Iis.wixext.dll -intermediatefolder obj\x64\Release\en-US\ -trackingfile "obj\x64\Release\WinUHid Package.wixproj.BindTracking-en-US.txt" -nologo  -bindPath D:\a\WinUHid\WinUHid\build\Release\x64 -bindPath RootDevCA=D:\a\WinUHid\WinUHid\build\Release\x64 -bindPath "WinUHid Driver=D:\a\WinUHid\WinUHid\build\Release\x64" -loc Package.en-us.wxl Package.wxs
+       WindowsInstallerValidation:
+         C:\Users\runneradmin\.nuget\packages\wixtoolset.sdk\6.0.0\tools\net472\x64\wix.exe msi validate "obj\x64\Release\en-US\WinUHid Package.msi" -pdb "obj\x64\Release\en-US\WinUHid Package.wixpdb" -intermediatefolder obj\x64\Release\en-US\ -nologo
+     1>D:\a\WinUHid\WinUHid\Installer\WinUHid Package\Package.wxs(4): warning WIX1076: ICE61: This product should remove only older versions of itself. The Maximum version is not less than the current product. (1.0.0.0 1.0.0.0) [D:\a\WinUHid\WinUHid\Installer\WinUHid Package\WinUHid Package.wixproj]
+       CopyFilesToOutputDirectory:
+         Creating directory "bin\x64\Release\en-US".
+         Creating hard link to copy "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\obj\x64\Release\en-US\WinUHid Package.msi" to "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\bin\x64\Release\en-US\WinUHid Package.msi".
+         WinUHid Package -> D:\a\WinUHid\WinUHid\Installer\WinUHid Package\bin\x64\Release\en-US\WinUHid Package.msi
+         Creating hard link to copy "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\obj\x64\Release\en-US\WinUHid Package.wixpdb" to "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\bin\x64\Release\en-US\WinUHid Package.wixpdb".
+     1>Done Building Project "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\WinUHid Package.wixproj" (default targets).
+
+Build succeeded.
+
+       "D:\a\WinUHid\WinUHid\Installer\WinUHid Package\WinUHid Package.wixproj" (default target) (1) ->
+       (WindowsInstallerValidation target) -> 
+         D:\a\WinUHid\WinUHid\Installer\WinUHid Package\Package.wxs(4): warning WIX1076: ICE61: This product should remove only older versions of itself. The Maximum version is not less than the current product. (1.0.0.0 1.0.0.0) [D:\a\WinUHid\WinUHid\Installer\WinUHid Package\WinUHid Package.wixproj]
+
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.83

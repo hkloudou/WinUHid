@@ -1,0 +1,15 @@
+[INFO] Talking to the driver directly; no WinUHid DLL is used.
+[PASS] Driver reachable, interface version 1.
+[PASS] Virtual mouse created.
+[PASS] Pointer really moved: x 584 -> 516.
+[INFO] Watch the pointer: it draws a small square.
+[PASS] Mouse wheel reports accepted (one notch up, one notch down).
+[PASS] Left button press really arrived, as the left button.
+[PASS] Virtual absolute mouse created.
+[INFO] Primary screen: 1024 x 768 pixels. The pointer will visit a few places and return.
+[PASS] Pointer placed where asked, wanted->got: (256,192)->(256,192) (768,576)->(768,576) (512,384)->(512,384) (123,234)->(123,234).
+[PASS] Left click at (512,384) really arrived, with the pointer still there.
+[PASS] Virtual keyboard created.
+[PASS] Key press really arrived: Windows saw Left Shift go down and up.
+
+RESULT: OK

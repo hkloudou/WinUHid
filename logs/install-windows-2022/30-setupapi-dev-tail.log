@@ -1,0 +1,400 @@
+     dvi:                Configuration: oem5.inf:PCI\VEN_15B3&DEV_1016&SUBSYS_019015B3&REV_80,*
+     dvi:           Install Device: Configuring device completed. 07:44:15.120
+     dvi:           Device Status: 0x01806000
+     dvi:           {Restarting Devices} 07:44:15.121
+     dvi:                Start: PCI\VEN_15B3&DEV_1016&SUBSYS_019015B3&REV_80\5&2A6A88BC&0&2
+!    dvi:                Device 'PCI\VEN_15B3&DEV_1016&SUBSYS_019015B3&REV_80\5&2A6A88BC&0&2' pending start: Device has problem: 0x38 (CM_PROB_NEED_CLASS_CONFIG), problem status: 0x00000000.
+     dvi:           {Restarting Devices exit} 07:44:15.128
+     dvi:      {Configure Device - exit(0x00000000)} 07:44:15.128
+     dvi: {Core Device Install - exit(0x00000000)} 07:44:15.128
+     dvi: Waiting for device post-install to complete. 07:44:15.128
+     dvi: Device post-install completed. 07:44:15.425
+     dvi: Device Status: 0x0180600a
+<<<  Section end 2026/10/03 07:44:15.441
+<<<  [Exit status: SUCCESS]
+
+
+>>>  [Device Install (DiInstallDriver) - C:\Program Files\WinUHid\WinUHidDriver.inf]
+>>>  Section start 2026/10/03 07:46:47.175
+      cmd: C:\Windows\System32\MsiExec.exe -Embedding F2065D5EAE9566AE395AB9464A266643 E Global\MSI0000
+     ndv: Flags: 0x00000000
+     ndv: INF path: C:\Program Files\WinUHid\WinUHidDriver.inf
+     dvs: {DrvSetupInstallDriver - C:\Program Files\WinUHid\WinUHidDriver.inf}
+     dvs:      Flags: 0x00000000
+     dvs:      {Driver Setup Import Driver Package: C:\Program Files\WinUHid\WinUHidDriver.inf} 07:46:47.222
+     sto:           {Copy Driver Package: C:\Program Files\WinUHid\WinUHidDriver.inf} 07:46:47.238
+     sto:                Driver Package = C:\Program Files\WinUHid\WinUHidDriver.inf
+     sto:                Flags          = 0x00000007
+     sto:                Destination    = C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}
+     sto:                Copying driver package files to 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}'.
+     flq:                {FILE_QUEUE_COMMIT} 07:46:47.269
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.cat' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.cat'.
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.dll' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.dll'.
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.inf' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.inf'.
+     flq:                {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:47.269
+     sto:           {Copy Driver Package: exit(0x00000000)} 07:46:47.269
+     ump:           Import flags: 0x00000000
+     pol:           {Driver package policy check} 07:46:47.300
+     pol:           {Driver package policy check - exit(0x00000000)} 07:46:47.316
+     sto:           {Stage Driver Package: C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.inf} 07:46:47.316
+     inf:                {Query Configurability: C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.inf} 07:46:47.316
+     inf:                     Driver package uses WDF.
+     inf:                     Driver package 'WinUHidDriver.inf' is configurable.
+     inf:                {Query Configurability: exit(0x00000000)} 07:46:47.316
+     flq:                {FILE_QUEUE_COMMIT} 07:46:47.316
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.cat' to 'C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.cat'.
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.dll' to 'C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.dll'.
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{d4ec5694-6d09-6545-a18a-870923de0135}\WinUHidDriver.inf' to 'C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.inf'.
+     flq:                {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:47.331
+     sto:                {DRIVERSTORE IMPORT VALIDATE} 07:46:47.331
+     sig:                     Driver package catalog is valid.
+     sig:                     {_VERIFY_FILE_SIGNATURE} 07:46:47.378
+     sig:                          Key      = WinUHidDriver.inf
+     sig:                          FilePath = C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.inf
+     sig:                          Catalog  = C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.cat
+!    sig:                          Verifying file against specific (valid) catalog failed.
+!    sig:                          Error 0x800b0109: A certificate chain processed, but terminated in a root certificate which is not trusted by the trust provider.
+     sig:                     {_VERIFY_FILE_SIGNATURE exit(0x800b0109)} 07:46:47.394
+     sig:                     {_VERIFY_FILE_SIGNATURE} 07:46:47.394
+     sig:                          Key      = WinUHidDriver.inf
+     sig:                          FilePath = C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.inf
+     sig:                          Catalog  = C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}\WinUHidDriver.cat
+     sig:                          Success: File is signed in Authenticode(tm) catalog.
+     sig:                          Error 0xe0000241: The INF was signed with an Authenticode(tm) catalog from a trusted publisher.
+     sig:                     {_VERIFY_FILE_SIGNATURE exit(0xe0000241)} 07:46:47.409
+     sto:                {DRIVERSTORE IMPORT VALIDATE: exit(0x00000000)} 07:46:47.425
+     sig:                Signer Score  = 0x0F000000 (Authenticode)
+     sig:                Signer Name   = WinUHid Dev Test 37107359106
+     sto:                {Core Driver Package Import: winuhiddriver.inf_amd64_b6788703a169c635} 07:46:47.425
+     sto:                     {DRIVERSTORE IMPORT BEGIN} 07:46:47.425
+     sto:                     {DRIVERSTORE IMPORT BEGIN: exit(0x00000000)} 07:46:47.425
+     cpy:                     {Copy Directory: C:\Windows\System32\DriverStore\Temp\{deef001f-3a5b-5b40-a07e-b5aa915581e8}} 07:46:47.425
+     cpy:                          Target Path = C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635
+     cpy:                     {Copy Directory: exit(0x00000000)} 07:46:47.425
+     idb:                     {Register Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\WinUHidDriver.inf} 07:46:47.425
+     idb:                          Created driver package object 'winuhiddriver.inf_amd64_b6788703a169c635' in SYSTEM database node.
+     idb:                          Created driver INF file object 'oem13.inf' in SYSTEM database node.
+     idb:                          Registered driver package 'winuhiddriver.inf_amd64_b6788703a169c635' with 'oem13.inf'.
+     idb:                     {Register Driver Package: exit(0x00000000)} 07:46:47.425
+     idb:                     {Publish Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\WinUHidDriver.inf} 07:46:47.425
+     idb:                          Activating driver package 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     cpy:                          Published 'winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf' to 'oem13.inf'.
+     idb:                          Indexed 2 device IDs for 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     sto:                          Flushed driver database node 'SYSTEM'. Time = 31 ms
+     idb:                     {Publish Driver Package: exit(0x00000000)} 07:46:47.460
+     sto:                     {DRIVERSTORE IMPORT END} 07:46:47.460
+     dvi:                          Flushed all driver package files to disk. Time = 13 ms
+     sig:                          Installed catalog 'WinUHidDriver.cat' as 'oem13.cat'.
+     sto:                     {DRIVERSTORE IMPORT END: exit(0x00000000)} 07:46:47.722
+     sto:                {Core Driver Package Import: exit(0x00000000)} 07:46:47.722
+     sto:           {Stage Driver Package: exit(0x00000000)} 07:46:47.722
+     dvs:           Driver Package:
+     dvs:                Outcome        - Imported
+     dvs:                Driver INF     - winuhiddriver.inf (oem13.inf)
+     dvs:                Class GUID     - {4d36e97d-e325-11ce-bfc1-08002be10318}
+     dvs:                Driver Version - 10/03/2026,7.45.14.582
+     dvs:      {Driver Setup Import Driver Package - exit (0x00000000)} 07:46:47.738
+     dvs:      {Driver Setup Update Device: ROOT\WINUHID\0000} 07:46:47.748
+     utl:           {Select Drivers - ROOT\WINUHID\0000} 07:46:47.748
+     utl:                Driver Node:
+     utl:                     Status         - Selected
+     utl:                     Driver INF     - oem13.inf (C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf)
+     utl:                     Class GUID     - {4d36e97d-e325-11ce-bfc1-08002be10318}
+     utl:                     Driver Version - 10/03/2026,7.45.14.582
+     utl:                     Configuration  - Root\WinUHid
+     utl:                     Driver Rank    - 00FF0000
+     utl:                     Signer Score   - Authenticode (0F000000)
+     utl:           {Select Drivers - exit(0x00000000} 07:46:47.748
+     dvs:           Installing best driver (oem13.inf) on device 'ROOT\WINUHID\0000'.
+     ump:           {Plug and Play Service: Device Install for ROOT\WINUHID\0000}
+     dvi:                {Core Device Install} 07:46:47.754
+     dvi:                     {Configure Device - ROOT\WINUHID\0000} 07:46:47.754
+     dvi:                          Device Status: 0x01802001
+     dvi:                          Parent Device: HTREE\ROOT\0
+     sto:                          {Configure Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf}
+     sto:                               Source Filter  = Root\WinUHid
+     inf:                               Class GUID     = {4d36e97d-e325-11ce-bfc1-08002be10318}
+     inf:                               Class Options  = Configurable BootCritical
+     inf:                               {Configure Driver: WinUHid Virtual HID Enumerator}
+     inf:                                    Section Name = WinUHid_Win10.NT
+     inf:                                    {Add Service: WUDFRd}
+     inf:                                         Start Type    = 3
+     inf:                                         Service Type  = 1
+     inf:                                         Error Control = 1
+     inf:                                         Image Path    = \SystemRoot\System32\drivers\WUDFRd.sys
+     inf:                                         Display Name  = Windows Driver Foundation - User-mode Driver Framework Reflector
+     inf:                                         Leaving existing load order group (base).
+     inf:                                         Updated service 'WUDFRd'.
+     inf:                                         Leaving existing description (A kernel mode driver that uses message-based interprocess communication mechanism to communicate with the driver manager and host process to facilitate UMDF drivers).
+     inf:                                    {Add Service: exit(0x00000000)}
+     inf:                                    {Add Service: vhf}
+     inf:                                         Start Type    = 3
+     inf:                                         Service Type  = 1
+     inf:                                         Error Control = 1
+     inf:                                         Image Path    = \SystemRoot\System32\drivers\vhf.sys
+     inf:                                         Display Name  = Virtual HID Framework (VHF) Driver
+     inf:                                         Description   = Kernel mode driver that implements the Virtual HID Framework (VHF)
+     inf:                                         Group         = Base
+     inf:                                         Updated service 'vhf'.
+     inf:                                    {Add Service: exit(0x00000000)}
+!    inf:                                    Registry key 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\(Default)' is missing or in use by untracked external source.
+     inf:                                    Hardware Id  = Root\WinUHid
+     inf:                                    {Configure Driver Configuration: WinUHid_Win10.NT}
+     inf:                                         Service Name  = vhf
+     inf:                                         Declarative Filters = WUDFRd
+     inf:                                         Included INFs = hidvhf.inf
+     inf:                                         Config Flags  = 0x00000000
+     inf:                                    {Configure Driver Configuration: exit(0x00000000)}
+     inf:                               {Configure Driver: exit(0x00000000)}
+     flq:                               {FILE_QUEUE_COMMIT} 07:46:47.801
+     flq:                                    Hardlinking 'C:\Windows\System32\DriverStore\FileRepository\hidvhf.inf_amd64_82d1d5210c639f2d\vhf.sys' to 'C:\Windows\System32\drivers\vhf.sys'.
+     cpy:                                    Existing file 'C:\Windows\System32\drivers\vhf.sys' remains unchanged.
+     flq:                               {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:47.816
+     sto:                          {Configure Driver Package: exit(0x00000000)}
+     dvi:                          Install Device: Configuring device. 07:46:47.816
+     dvi:                               Configuration: oem13.inf:Root\WinUHid,*
+     dvi:                          Install Device: Configuring device completed. 07:46:47.816
+     dvi:                          Device Status: 0x01802001
+     dvi:                          Install Device: Starting device 'ROOT\WINUHID\0000'. 07:46:47.816
+     dvi:                          Install Device: Starting device completed. 07:46:48.035
+     dvi:                     {Configure Device - exit(0x00000000)} 07:46:48.035
+     dvi:                {Core Device Install - exit(0x00000000)} 07:46:48.035
+     ump:           {Plug and Play Service: Device Install exit(00000000)}
+     dvs:           {Install Related Drivers} 07:46:48.051
+     dvs:           {Install Related Drivers: exit(0x00000000)} 07:46:48.051
+     dvs:      {Driver Setup Update Device - exit(0x00000000)} 07:46:48.051
+     dvs: {DrvSetupInstallDriver - exit(00000000)}
+<<<  Section end 2026/10/03 07:46:48.051
+<<<  [Exit status: SUCCESS]
+
+
+>>>  [Uninstall device subtree (DiUninstallDevice) - ROOT\WINUHID\0000]
+>>>  Section start 2026/10/03 07:46:49.473
+      cmd: C:\Windows\System32\MsiExec.exe -Embedding 5DCE3D748AB7A5BAE54BB425554923EC E Global\MSI0000
+     ndv: Uninstalling device 'ROOT\WINUHID\0000'.
+     dvi: {DIF_REMOVE} 07:46:49.504
+     dvi:      Default installer: Enter 07:46:49.504
+     dvi:           {Remove DEVICE}
+     dvi:                {Delete Device - ROOT\WINUHID\0000}
+     dvi:                     Query-and-Remove succeeded
+     dvi:                {Delete Device - exit(0x00000000)}
+     dvi:           {Remove DEVICE exit (0x00000000)}
+     dvi:      Default installer: Exit
+     dvi: {DIF_REMOVE - exit(0x00000000)} 07:46:49.520
+<<<  Section end 2026/10/03 07:46:49.520
+<<<  [Exit status: SUCCESS]
+
+
+>>>  [Driver Uninstall (DiUninstallDriver) - C:\Program Files\WinUHid\WinUHidDriver.inf]
+>>>  Section start 2026/10/03 07:46:49.536
+      cmd: C:\Windows\System32\MsiExec.exe -Embedding 5DCE3D748AB7A5BAE54BB425554923EC E Global\MSI0000
+     ndv: Flags: 0x00000000
+     ndv: INF path: C:\Program Files\WinUHid\WinUHidDriver.inf
+     dvs: {DrvSetupUninstallDriver - C:\Program Files\WinUHid\WinUHidDriver.inf}
+     dvs:      Flags: 0x00000000
+     dvs:      {Driver Setup Delete Driver Package: oem13.inf} 07:46:49.536
+     ump:           Delete flags: 0x00000002
+     pol:           {Driver package policy check} 07:46:49.552
+     pol:           {Driver package policy check - exit(0x00000000)} 07:46:49.552
+     sto:           {Unstage Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf} 07:46:49.552
+     sto:                {Core Driver Package Delete: winuhiddriver.inf_amd64_b6788703a169c635} 07:46:49.552
+     sto:                     {DRIVERSTORE DELETE BEGIN} 07:46:49.552
+     sto:                     {DRIVERSTORE DELETE BEGIN: exit(0x00000000)} 07:46:49.552
+     sto:                     {Unconfigure Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf}
+     inf:                          Class GUID     = {4d36e97d-e325-11ce-bfc1-08002be10318}
+     inf:                          Class Options  = Configurable BootCritical
+     inf:                          {Unconfigure Driver: WinUHid Virtual HID Enumerator}
+     inf:                               Section Name = WinUHid_Win10.NT
+     inf:                               {Add Service: WUDFRd}
+     inf:                                    Service 'WUDFRd' still in use by 8 sources.
+     inf:                               {Add Service: exit(0x00000000)}
+     inf:                               {Add Service: vhf}
+     inf:                                    Service 'vhf' still in use by 2 sources.
+     inf:                               {Add Service: exit(0x00000000)}
+     inf:                               AddReg: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\WdfMajorVersion
+     inf:                               AddReg: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\WdfMinorVersion
+     inf:                               AddReg: HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\ImagePath
+     cpy:                               Skipping isolated file 'WinUHidDriver.dll'.
+     cpy:                               Cannot unconfigure inbox file 'C:\Windows\System32\DriverStore\FileRepository\hidvhf.inf_amd64_82d1d5210c639f2d\vhf.sys' from a non-inbox driver package.
+     inf:                               Hardware Id  = Root\WinUHid
+     inf:                          {Unconfigure Driver: exit(0x00000000)}
+     flq:                          {FILE_QUEUE_COMMIT} 07:46:49.567
+     flq:                          {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:49.567
+     sto:                     {Unconfigure Driver Package: exit(0x00000000)}
+     idb:                     {Unpublish Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf} 07:46:49.567
+     idb:                          Clearing active driver package 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     cpy:                          Unpublished 'oem13.inf'.
+     idb:                          Deindexed 2 device IDs for 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     sto:                          Flushed driver database node 'SYSTEM'. Time = 31 ms
+     idb:                     {Unpublish Driver Package: exit(0x00000000)} 07:46:49.614
+     idb:                     {Unregister Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf} 07:46:49.614
+     idb:                          Unregistered driver package 'winuhiddriver.inf_amd64_b6788703a169c635' from 'oem13.inf'.
+     idb:                          Deleted driver package object 'winuhiddriver.inf_amd64_b6788703a169c635' from SYSTEM database node.
+     idb:                          Deleted driver INF file object 'oem13.inf' from SYSTEM database node.
+     idb:                     {Unregister Driver Package: exit(0x00000000)} 07:46:49.614
+     cpy:                     {Delete Directory: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635} 07:46:49.614
+     cpy:                     {Delete Directory: exit(0x00000000)} 07:46:49.614
+     sto:                     {DRIVERSTORE DELETE END} 07:46:49.614
+     sig:                          Uninstalled catalog 'oem13.cat'.
+     sto:                     {DRIVERSTORE DELETE END: exit(0x00000000)} 07:46:49.629
+     sto:                {Core Driver Package Delete: exit(0x00000000)} 07:46:49.629
+     sto:           {Unstage Driver Package: exit(0x00000000)} 07:46:49.629
+     dvs:      {Driver Setup Delete Driver Package - exit (0x00000000)} 07:46:49.629
+     dvs: {DrvSetupUninstallDriver - exit(00000000)}
+<<<  Section end 2026/10/03 07:46:49.629
+<<<  [Exit status: SUCCESS]
+
+
+>>>  [Device Install (DiInstallDriver) - C:\Program Files\WinUHid\WinUHidDriver.inf]
+>>>  Section start 2026/10/03 07:46:50.583
+      cmd: C:\Windows\System32\MsiExec.exe -Embedding E53C81FC01D1A106BCEABBFE06B74036 E Global\MSI0000
+     ndv: Flags: 0x00000000
+     ndv: INF path: C:\Program Files\WinUHid\WinUHidDriver.inf
+     dvs: {DrvSetupInstallDriver - C:\Program Files\WinUHid\WinUHidDriver.inf}
+     dvs:      Flags: 0x00000000
+     dvs:      {Driver Setup Import Driver Package: C:\Program Files\WinUHid\WinUHidDriver.inf} 07:46:50.583
+     sto:           {Copy Driver Package: C:\Program Files\WinUHid\WinUHidDriver.inf} 07:46:50.583
+     sto:                Driver Package = C:\Program Files\WinUHid\WinUHidDriver.inf
+     sto:                Flags          = 0x00000007
+     sto:                Destination    = C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}
+     sto:                Copying driver package files to 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}'.
+     flq:                {FILE_QUEUE_COMMIT} 07:46:50.583
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.cat' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.cat'.
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.dll' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.dll'.
+     flq:                     Copying 'C:\Program Files\WinUHid\WinUHidDriver.inf' to 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.inf'.
+     flq:                {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:50.599
+     sto:           {Copy Driver Package: exit(0x00000000)} 07:46:50.599
+     ump:           Import flags: 0x00000000
+     pol:           {Driver package policy check} 07:46:50.599
+     pol:           {Driver package policy check - exit(0x00000000)} 07:46:50.599
+     sto:           {Stage Driver Package: C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.inf} 07:46:50.599
+     inf:                {Query Configurability: C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.inf} 07:46:50.614
+     inf:                     Driver package uses WDF.
+     inf:                     Driver package 'WinUHidDriver.inf' is configurable.
+     inf:                {Query Configurability: exit(0x00000000)} 07:46:50.614
+     flq:                {FILE_QUEUE_COMMIT} 07:46:50.614
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.cat' to 'C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.cat'.
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.dll' to 'C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.dll'.
+     flq:                     Copying 'C:\Users\RUNNER~1\AppData\Local\Temp\{1fc14a17-43cd-6a4d-bae6-c7124593a84e}\WinUHidDriver.inf' to 'C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.inf'.
+     flq:                {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:50.630
+     sto:                {DRIVERSTORE IMPORT VALIDATE} 07:46:50.630
+     sig:                     Driver package catalog is valid.
+     sig:                     {_VERIFY_FILE_SIGNATURE} 07:46:50.677
+     sig:                          Key      = WinUHidDriver.inf
+     sig:                          FilePath = C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.inf
+     sig:                          Catalog  = C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.cat
+!    sig:                          Verifying file against specific (valid) catalog failed.
+!    sig:                          Error 0x800b0109: A certificate chain processed, but terminated in a root certificate which is not trusted by the trust provider.
+     sig:                     {_VERIFY_FILE_SIGNATURE exit(0x800b0109)} 07:46:50.692
+     sig:                     {_VERIFY_FILE_SIGNATURE} 07:46:50.692
+     sig:                          Key      = WinUHidDriver.inf
+     sig:                          FilePath = C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.inf
+     sig:                          Catalog  = C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}\WinUHidDriver.cat
+     sig:                          Success: File is signed in Authenticode(tm) catalog.
+     sig:                          Error 0xe0000241: The INF was signed with an Authenticode(tm) catalog from a trusted publisher.
+     sig:                     {_VERIFY_FILE_SIGNATURE exit(0xe0000241)} 07:46:50.708
+     sto:                {DRIVERSTORE IMPORT VALIDATE: exit(0x00000000)} 07:46:50.708
+     sig:                Signer Score  = 0x0F000000 (Authenticode)
+     sig:                Signer Name   = WinUHid Dev Test 37107359106
+     sto:                {Core Driver Package Import: winuhiddriver.inf_amd64_b6788703a169c635} 07:46:50.724
+     sto:                     {DRIVERSTORE IMPORT BEGIN} 07:46:50.724
+     sto:                     {DRIVERSTORE IMPORT BEGIN: exit(0x00000000)} 07:46:50.724
+     cpy:                     {Copy Directory: C:\Windows\System32\DriverStore\Temp\{d9987170-85fe-7845-b0f4-409d24048502}} 07:46:50.724
+     cpy:                          Target Path = C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635
+     cpy:                     {Copy Directory: exit(0x00000000)} 07:46:50.724
+     idb:                     {Register Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\WinUHidDriver.inf} 07:46:50.724
+     idb:                          Created driver package object 'winuhiddriver.inf_amd64_b6788703a169c635' in SYSTEM database node.
+     idb:                          Created driver INF file object 'oem13.inf' in SYSTEM database node.
+     idb:                          Registered driver package 'winuhiddriver.inf_amd64_b6788703a169c635' with 'oem13.inf'.
+     idb:                     {Register Driver Package: exit(0x00000000)} 07:46:50.724
+     idb:                     {Publish Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\WinUHidDriver.inf} 07:46:50.724
+     idb:                          Activating driver package 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     cpy:                          Published 'winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf' to 'oem13.inf'.
+     idb:                          Indexed 2 device IDs for 'winuhiddriver.inf_amd64_b6788703a169c635'.
+     sto:                          Flushed driver database node 'SYSTEM'. Time = 31 ms
+     idb:                     {Publish Driver Package: exit(0x00000000)} 07:46:50.755
+     sto:                     {DRIVERSTORE IMPORT END} 07:46:50.755
+     dvi:                          Flushed all driver package files to disk. Time = 16 ms
+     sig:                          Installed catalog 'WinUHidDriver.cat' as 'oem13.cat'.
+     sto:                     {DRIVERSTORE IMPORT END: exit(0x00000000)} 07:46:50.770
+     sto:                {Core Driver Package Import: exit(0x00000000)} 07:46:50.770
+     sto:           {Stage Driver Package: exit(0x00000000)} 07:46:50.770
+     dvs:           Driver Package:
+     dvs:                Outcome        - Imported
+     dvs:                Driver INF     - winuhiddriver.inf (oem13.inf)
+     dvs:                Class GUID     - {4d36e97d-e325-11ce-bfc1-08002be10318}
+     dvs:                Driver Version - 10/03/2026,7.45.14.582
+     dvs:      {Driver Setup Import Driver Package - exit (0x00000000)} 07:46:50.802
+     dvs:      {Driver Setup Update Device: ROOT\WINUHID\0000} 07:46:50.802
+     utl:           {Select Drivers - ROOT\WINUHID\0000} 07:46:50.802
+     utl:                Driver Node:
+     utl:                     Status         - Selected
+     utl:                     Driver INF     - oem13.inf (C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf)
+     utl:                     Class GUID     - {4d36e97d-e325-11ce-bfc1-08002be10318}
+     utl:                     Driver Version - 10/03/2026,7.45.14.582
+     utl:                     Configuration  - Root\WinUHid
+     utl:                     Driver Rank    - 00FF0000
+     utl:                     Signer Score   - Authenticode (0F000000)
+     utl:           {Select Drivers - exit(0x00000000} 07:46:50.802
+     dvs:           Installing best driver (oem13.inf) on device 'ROOT\WINUHID\0000'.
+     ump:           {Plug and Play Service: Device Install for ROOT\WINUHID\0000}
+     dvi:                {Core Device Install} 07:46:50.802
+     dvi:                     {Configure Device - ROOT\WINUHID\0000} 07:46:50.802
+     dvi:                          Device Status: 0x01802001
+     dvi:                          Parent Device: HTREE\ROOT\0
+     sto:                          {Configure Driver Package: C:\Windows\System32\DriverStore\FileRepository\winuhiddriver.inf_amd64_b6788703a169c635\winuhiddriver.inf}
+     sto:                               Source Filter  = Root\WinUHid
+     inf:                               Class GUID     = {4d36e97d-e325-11ce-bfc1-08002be10318}
+     inf:                               Class Options  = Configurable BootCritical
+     inf:                               {Configure Driver: WinUHid Virtual HID Enumerator}
+     inf:                                    Section Name = WinUHid_Win10.NT
+     inf:                                    {Add Service: WUDFRd}
+     inf:                                         Start Type    = 3
+     inf:                                         Service Type  = 1
+     inf:                                         Error Control = 1
+     inf:                                         Image Path    = \SystemRoot\System32\drivers\WUDFRd.sys
+     inf:                                         Display Name  = Windows Driver Foundation - User-mode Driver Framework Reflector
+     inf:                                         Leaving existing load order group (base).
+     inf:                                         Updated service 'WUDFRd'.
+     inf:                                         Leaving existing description (A kernel mode driver that uses message-based interprocess communication mechanism to communicate with the driver manager and host process to facilitate UMDF drivers).
+     inf:                                    {Add Service: exit(0x00000000)}
+     inf:                                    {Add Service: vhf}
+     inf:                                         Start Type    = 3
+     inf:                                         Service Type  = 1
+     inf:                                         Error Control = 1
+     inf:                                         Image Path    = \SystemRoot\System32\drivers\vhf.sys
+     inf:                                         Display Name  = Virtual HID Framework (VHF) Driver
+     inf:                                         Description   = Kernel mode driver that implements the Virtual HID Framework (VHF)
+     inf:                                         Group         = Base
+     inf:                                         Updated service 'vhf'.
+     inf:                                    {Add Service: exit(0x00000000)}
+!    inf:                                    Registry key 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WUDF\Services\WinUHidDriver\(Default)' is missing or in use by untracked external source.
+     inf:                                    Hardware Id  = Root\WinUHid
+     inf:                                    {Configure Driver Configuration: WinUHid_Win10.NT}
+     inf:                                         Service Name  = vhf
+     inf:                                         Declarative Filters = WUDFRd
+     inf:                                         Included INFs = hidvhf.inf
+     inf:                                         Config Flags  = 0x00000000
+     inf:                                    {Configure Driver Configuration: exit(0x00000000)}
+     inf:                               {Configure Driver: exit(0x00000000)}
+     flq:                               {FILE_QUEUE_COMMIT} 07:46:50.833
+     flq:                                    Hardlinking 'C:\Windows\System32\DriverStore\FileRepository\hidvhf.inf_amd64_82d1d5210c639f2d\vhf.sys' to 'C:\Windows\System32\drivers\vhf.sys'.
+     cpy:                                    Existing file 'C:\Windows\System32\drivers\vhf.sys' remains unchanged.
+     flq:                               {FILE_QUEUE_COMMIT - exit(0x00000000)} 07:46:50.833
+     sto:                          {Configure Driver Package: exit(0x00000000)}
+     dvi:                          Install Device: Configuring device. 07:46:50.833
+     dvi:                               Configuration: oem13.inf:Root\WinUHid,*
+     dvi:                          Install Device: Configuring device completed. 07:46:50.833
+     dvi:                          Device Status: 0x01802001
+     dvi:                          Install Device: Starting device 'ROOT\WINUHID\0000'. 07:46:50.833
+     dvi:                          Install Device: Starting device completed. 07:46:50.880
+     dvi:                     {Configure Device - exit(0x00000000)} 07:46:50.880
+     dvi:                {Core Device Install - exit(0x00000000)} 07:46:50.880
+     ump:           {Plug and Play Service: Device Install exit(00000000)}
+     dvs:           {Install Related Drivers} 07:46:50.892
+     dvs:           {Install Related Drivers: exit(0x00000000)} 07:46:50.892
+     dvs:      {Driver Setup Update Device - exit(0x00000000)} 07:46:50.892
+     dvs: {DrvSetupInstallDriver - exit(00000000)}
+<<<  Section end 2026/10/03 07:46:50.896
+<<<  [Exit status: SUCCESS]
+

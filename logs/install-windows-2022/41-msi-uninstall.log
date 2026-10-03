@@ -1,0 +1,400 @@
+MSI (s) (DC:EC) [07:47:56:292]: PROPERTY CHANGE: Adding ProgramFiles6432Folder property. Its value is 'C:\Program Files\'.
+MSI (s) (DC:EC) [07:47:56:292]: PROPERTY CHANGE: Modifying INSTALLFOLDER property. Its current value is 'C:\Program Files\WinUHid'. Its new value: 'C:\Program Files\WinUHid\'.
+MSI (s) (DC:EC) [07:47:56:292]: Target path resolution complete. Dumping Directory table...
+MSI (s) (DC:EC) [07:47:56:292]: Note: target paths subject to change (via custom actions or browsing)
+MSI (s) (DC:EC) [07:47:56:292]: Dir (target): Key: TARGETDIR	, Object: D:\
+MSI (s) (DC:EC) [07:47:56:292]: Dir (target): Key: ProgramFiles64Folder	, Object: C:\Program Files\
+MSI (s) (DC:EC) [07:47:56:292]: Dir (target): Key: ProgramFiles6432Folder	, Object: C:\Program Files\
+MSI (s) (DC:EC) [07:47:56:292]: Dir (target): Key: INSTALLFOLDER	, Object: C:\Program Files\WinUHid\
+MSI (s) (DC:EC) [07:47:56:292]: PROPERTY CHANGE: Adding INSTALLLEVEL property. Its value is '1'.
+Action start 7:47:56: CostFinalize.
+MSI (s) (DC:EC) [07:47:56:292]: Doing action: MigrateFeatureStates
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: CostFinalize. Return value 1.
+MSI (s) (DC:EC) [07:47:56:292]: Skipping MigrateFeatureStates action: not run in maintenance mode
+Action start 7:47:56: MigrateFeatureStates.
+MSI (s) (DC:EC) [07:47:56:292]: Doing action: InstallValidate
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: MigrateFeatureStates. Return value 0.
+MSI (s) (DC:EC) [07:47:56:292]: PROPERTY CHANGE: Deleting MsiRestartManagerSessionKey property. Its current value is 'a34bfcc6b994384da971303beab7d8a8'.
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Dialog 
+MSI (s) (DC:EC) [07:47:56:292]: Feature: Main; Installed: Local;   Request: Absent;   Action: Absent
+MSI (s) (DC:EC) [07:47:56:292]: Component: WinUHidCertificate; Installed: Local;   Request: Absent;   Action: Absent
+MSI (s) (DC:EC) [07:47:56:292]: Component: flsHjMXynAsoHeJ3zE6Nm9Xq4yPW4Q; Installed: Local;   Request: Absent;   Action: Absent
+MSI (s) (DC:EC) [07:47:56:292]: Component: flsZISlrjTFQcASSBbID_W1et7wxn8; Installed: Local;   Request: Absent;   Action: Absent
+MSI (s) (DC:EC) [07:47:56:292]: Component: flscL.14GV.xf.MzLPvJiBTjfCULx0; Installed: Local;   Request: Absent;   Action: Absent
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Registry 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: BindImage 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: ProgId 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: PublishComponent 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: SelfReg 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Extension 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Font 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Shortcut 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Class 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Icon 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: TypeLib 
+Action start 7:47:56: InstallValidate.
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: _RemoveFilePath 
+MSI (s) (DC:EC) [07:47:56:292]: PROPERTY CHANGE: Modifying CostingComplete property. Its current value is '0'. Its new value: '1'.
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Registry 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: BindImage 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: ProgId 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: PublishComponent 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: SelfReg 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Extension 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Font 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Shortcut 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Class 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: Icon 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: TypeLib 
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2727 2:  
+MSI (s) (DC:EC) [07:47:56:292]: Note: 1: 2205 2:  3: FilesInUse 
+MSI (s) (DC:EC) [07:47:56:308]: Note: 1: 2727 2:  
+MSI (s) (DC:EC) [07:47:56:308]: Doing action: InstallInitialize
+MSI (s) (DC:EC) [07:47:56:308]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: InstallValidate. Return value 1.
+MSI (s) (DC:EC) [07:47:56:308]: Machine policy value 'AlwaysInstallElevated' is 0
+MSI (s) (DC:EC) [07:47:56:308]: User policy value 'AlwaysInstallElevated' is 0
+MSI (s) (DC:EC) [07:47:56:308]: BeginTransaction: Locking Server
+MSI (s) (DC:EC) [07:47:56:308]: Note: 1: 2203 2: C:\Windows\Installer\inprogressinstallinfo.ipi 3: -2147287038 
+MSI (s) (DC:EC) [07:47:56:308]: SRSetRestorePoint skipped for this transaction.
+MSI (s) (DC:EC) [07:47:56:308]: Note: 1: 2203 2: C:\Windows\Installer\inprogressinstallinfo.ipi 3: -2147287038 
+MSI (s) (DC:EC) [07:47:56:308]: Server not locked: locking for product {970E83EE-9A44-4746-B8D2-307703CECFE7}
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action start 7:47:56: InstallInitialize.
+MSI (s) (DC:EC) [07:47:56:324]: PROPERTY CHANGE: Deleting ProductToBeRegistered property. Its current value is '1'.
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: Icon 
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2228 2:  3: Icon 4: SELECT `Name`, `Data` FROM `Icon` 
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: RemoveExistingProducts
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: InstallInitialize. Return value 1.
+MSI (s) (DC:EC) [07:47:56:324]: Skipping RemoveExistingProducts action: current configuration is maintenance mode or an uninstall
+Action start 7:47:56: RemoveExistingProducts.
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: ProcessComponents
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: RemoveExistingProducts. Return value 0.
+Action start 7:47:56: ProcessComponents.
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: UnpublishFeatures
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: ProcessComponents. Return value 1.
+Action start 7:47:56: UnpublishFeatures.
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: DeleteRootDeviceRollback
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: UnpublishFeatures. Return value 1.
+MSI (s) (DC:EC) [07:47:56:324]: MSI_LUA : Custom Action 'DeleteRootDeviceRollback' is running with sufficient privileges.
+Action start 7:47:56: DeleteRootDeviceRollback.
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: DeleteRootDevice
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: DeleteRootDeviceRollback. Return value 1.
+MSI (s) (DC:EC) [07:47:56:324]: MSI_LUA : Custom Action 'DeleteRootDevice' is running with sufficient privileges.
+Action start 7:47:56: DeleteRootDevice.
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: UninstallDriverRollback
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: DeleteRootDevice. Return value 1.
+MSI (s) (DC:EC) [07:47:56:324]: MSI_LUA : Custom Action 'UninstallDriverRollback' is running with sufficient privileges.
+Action start 7:47:56: UninstallDriverRollback.
+MSI (s) (DC:EC) [07:47:56:324]: Doing action: UninstallDriver
+MSI (s) (DC:EC) [07:47:56:324]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: UninstallDriverRollback. Return value 1.
+MSI (s) (DC:EC) [07:47:56:324]: MSI_LUA : Custom Action 'UninstallDriver' is running with sufficient privileges.
+Action start 7:47:56: UninstallDriver.
+MSI (s) (DC:EC) [07:47:56:339]: Doing action: Wix4UninstallCertificates_X64
+MSI (s) (DC:EC) [07:47:56:339]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: UninstallDriver. Return value 1.
+MSI (s) (DC:24) [07:47:56:339]: Invoking remote custom action. DLL: C:\Windows\Installer\MSIA443.tmp, Entrypoint: UninstallCertificates
+MSI (s) (DC:60) [07:47:56:339]: Generating random cookie.
+MSI (s) (DC:60) [07:47:56:339]: Created Custom Action Server with PID 1304 (0x518).
+MSI (s) (DC:B8) [07:47:56:355]: Running as a service.
+MSI (s) (DC:B8) [07:47:56:355]: Hello, I'm your 64bit Impersonated custom action server.
+MSI (s) (DC!3C) [07:47:56:370]: PROPERTY CHANGE: Adding Wix4DeleteMachineCertificate_X64 property. Its value is '**********'.
+Action start 7:47:56: Wix4UninstallCertificates_X64.
+MSI (s) (DC!3C) [07:47:56:370]: Doing action: Wix4DeleteMachineCertificate_X64
+MSI (s) (DC!3C) [07:47:56:370]: Note: 1: 2205 2:  3: ActionText 
+MSI (s) (DC!3C) [07:47:56:370]: MSI_LUA : Custom Action 'Wix4DeleteMachineCertificate_X64' is running with sufficient privileges.
+Action start 7:47:56: Wix4DeleteMachineCertificate_X64.
+Action ended 7:47:56: Wix4DeleteMachineCertificate_X64. Return value 1.
+MSI (s) (DC:EC) [07:47:56:370]: Doing action: RemoveFiles
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: Wix4UninstallCertificates_X64. Return value 1.
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: RemoveFile 
+Action start 7:47:56: RemoveFiles.
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: RemoveFile 
+MSI (s) (DC:EC) [07:47:56:370]: Doing action: RemoveFolders
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: RemoveFiles. Return value 0.
+Action start 7:47:56: RemoveFolders.
+MSI (s) (DC:EC) [07:47:56:370]: Doing action: CreateFolders
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: RemoveFolders. Return value 1.
+Action start 7:47:56: CreateFolders.
+MSI (s) (DC:EC) [07:47:56:370]: Doing action: InstallFiles
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: CreateFolders. Return value 1.
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: Patch 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2228 2:  3: Patch 4: SELECT `Patch`.`File_`, `Patch`.`Header`, `Patch`.`Attributes`, `Patch`.`Sequence`, `Patch`.`StreamRef_` FROM `Patch` WHERE `Patch`.`File_` = ? AND `Patch`.`#_MsiActive`=? ORDER BY `Patch`.`Sequence` 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: Error 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2228 2:  3: Error 4: SELECT `Message` FROM `Error` WHERE `Error` = 1302 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: MsiSFCBypass 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2228 2:  3: MsiSFCBypass 4: SELECT `File_` FROM `MsiSFCBypass` WHERE `File_` = ? 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: MsiPatchHeaders 
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2228 2:  3: MsiPatchHeaders 4: SELECT `Header` FROM `MsiPatchHeaders` WHERE `StreamRef` = ? 
+Action start 7:47:56: InstallFiles.
+MSI (s) (DC:EC) [07:47:56:370]: Doing action: Wix4InstallCertificates_X64
+MSI (s) (DC:EC) [07:47:56:370]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: InstallFiles. Return value 1.
+MSI (s) (DC:D4) [07:47:56:370]: Invoking remote custom action. DLL: C:\Windows\Installer\MSIA463.tmp, Entrypoint: InstallCertificates
+Action start 7:47:56: Wix4InstallCertificates_X64.
+MSI (s) (DC:EC) [07:47:56:386]: Doing action: RegisterUser
+MSI (s) (DC:EC) [07:47:56:386]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: Wix4InstallCertificates_X64. Return value 1.
+Action start 7:47:56: RegisterUser.
+MSI (s) (DC:EC) [07:47:56:386]: Skipping action: CreateRootDeviceRollback (condition is false)
+MSI (s) (DC:EC) [07:47:56:386]: Skipping action: CreateRootDevice (condition is false)
+MSI (s) (DC:EC) [07:47:56:386]: Skipping action: InstallDriverRollback (condition is false)
+MSI (s) (DC:EC) [07:47:56:386]: Skipping action: InstallDriver (condition is false)
+MSI (s) (DC:EC) [07:47:56:386]: Doing action: RegisterProduct
+MSI (s) (DC:EC) [07:47:56:386]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: RegisterUser. Return value 0.
+Action start 7:47:56: RegisterProduct.
+MSI (s) (DC:EC) [07:47:56:386]: Doing action: PublishFeatures
+MSI (s) (DC:EC) [07:47:56:386]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: RegisterProduct. Return value 1.
+Action start 7:47:56: PublishFeatures.
+MSI (s) (DC:EC) [07:47:56:386]: Doing action: PublishProduct
+MSI (s) (DC:EC) [07:47:56:386]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: PublishFeatures. Return value 1.
+Action start 7:47:56: PublishProduct.
+MSI (s) (DC:EC) [07:47:56:386]: Doing action: InstallFinalize
+MSI (s) (DC:EC) [07:47:56:386]: Note: 1: 2205 2:  3: ActionText 
+Action ended 7:47:56: PublishProduct. Return value 1.
+MSI (s) (DC:EC) [07:47:56:386]: Running Script: C:\Windows\Installer\MSIA433.tmp
+MSI (s) (DC:EC) [07:47:56:386]: PROPERTY CHANGE: Adding UpdateStarted property. Its value is '1'.
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 2265 2:  3: -2147287035 
+MSI (s) (DC:EC) [07:47:56:402]: Machine policy value 'DisableRollback' is 0
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 2318 2:  
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 2318 2:  
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 1402 2: HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Installer\Rollback\Scripts 3: 2 
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: Header(Signature=1397708873,Version=500,Timestamp=1564687869,LangId=1033,Platform=589824,ScriptType=1,ScriptMajorVersion=21,ScriptMinorVersion=4,ScriptAttributes=1)
+Action start 7:47:56: InstallFinalize.
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ProductInfo(ProductKey={970E83EE-9A44-4746-B8D2-307703CECFE7},ProductName=WinUHid,PackageName=WinUHid-dev-test-x64.msi,Language=1033,Version=16777216,Assignment=1,ObsoleteArg=0,,,PackageCode={BD4165D7-50F1-49B1-A6D5-2778880DAD6B},,,InstanceType=0,LUASetting=0,RemoteURTInstalls=0,ProductDeploymentFlags=3)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: DialogInfo(Type=0,Argument=1033)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: DialogInfo(Type=1,Argument=WinUHid)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: RollbackInfo(,RollbackAction=Rollback,RollbackDescription=Rolling back action: [1],,CleanupAction=RollbackCleanup,CleanupDescription=Removing backup files File: [1],)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: SetBaseline(Baseline=0,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: SetBaseline(Baseline=1,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ActionStart(Name=InstallInitialize,,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ProductUnregister(UpgradeCode={4DC77BCC-A072-5A7D-BC00-89D2E0A6665F})
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 1402 2: UNKNOWN\Products\EE38E07944A964748B2D037730ECFC7E\Transforms 3: 2 
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 1402 2: UNKNOWN\Products\EE38E07944A964748B2D037730ECFC7E\Transforms 3: 2 
+MSI (s) (DC:EC) [07:47:56:402]: Scheduling file 'C:\Windows\Installer\292cf.msi' for deletion during post-install cleanup (not post-reboot).
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 1402 2: UNKNOWN\Products\EE38E07944A964748B2D037730ECFC7E\Usage 3: 2 
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ProductCPDisplayInfoUnregister()
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ProductUnpublish(PackageKey={BD4165D7-50F1-49B1-A6D5-2778880DAD6B})
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: UpgradeCodeUnpublish(UpgradeCode={4DC77BCC-A072-5A7D-BC00-89D2E0A6665F})
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ProductUnpublishClient(,,)
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 1402 2: UNKNOWN\Installer\Products\EE38E07944A964748B2D037730ECFC7E 3: 2 
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: SourceListUnpublish(,)
+MSI (s) (DC:EC) [07:47:56:402]: Note: 1: 1402 2: UNKNOWN\Installer\Products\EE38E07944A964748B2D037730ECFC7E\SourceList 3: 2 
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ActionStart(Name=ProcessComponents,Description=Updating component registration,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ProgressTotal(Total=4,Type=1,ByteEquivalent=24000)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: UnregisterSharedComponentProvider(Component={09B24DE9-515E-45B1-B350-CD6E20022457},ProductCode={970E83EE-9A44-4746-B8D2-307703CECFE7})
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ComponentUnregister(ComponentId={09B24DE9-515E-45B1-B350-CD6E20022457},,BinaryType=1,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: UnregisterSharedComponentProvider(Component={B1C71449-B87C-5D54-B11D-7C8647A52759},ProductCode={970E83EE-9A44-4746-B8D2-307703CECFE7})
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ComponentUnregister(ComponentId={B1C71449-B87C-5D54-B11D-7C8647A52759},,BinaryType=1,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: UnregisterSharedComponentProvider(Component={B0DD4633-00AC-539E-9F5F-B08CBE4139A3},ProductCode={970E83EE-9A44-4746-B8D2-307703CECFE7})
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ComponentUnregister(ComponentId={B0DD4633-00AC-539E-9F5F-B08CBE4139A3},,BinaryType=1,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: UnregisterSharedComponentProvider(Component={6A64CC4E-D641-5A6A-980C-3B658A3C909C},ProductCode={970E83EE-9A44-4746-B8D2-307703CECFE7})
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ComponentUnregister(ComponentId={6A64CC4E-D641-5A6A-980C-3B658A3C909C},,BinaryType=1,)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: ActionStart(Name=UnpublishFeatures,Description=Unpublishing Product Features Feature: [1],)
+MSI (s) (DC:EC) [07:47:56:402]: Executing op: FeatureUnpublish(Feature=Main,,Absent=2,Component=qAu,&zewI=i$~[KqpY!DTWc.beDd~EO%}6S@']`D+kgpar~CsBebO6UZ_*O]hVW4JZ^+(EnCSUHrr.CZ)
+MSI (s) (DC:EC) [07:47:56:417]: Note: 1: 1402 2: UNKNOWN\Installer\Features\EE38E07944A964748B2D037730ECFC7E 3: 2 
+MSI (s) (DC:EC) [07:47:56:417]: Executing op: ActionStart(Name=DeleteRootDeviceRollback,,)
+MSI (s) (DC:EC) [07:47:56:417]: Executing op: CustomActionSchedule(Action=DeleteRootDeviceRollback,ActionType=3393,Source=BinaryData,Target=CreateRootDevice,)
+MSI (s) (DC:EC) [07:47:56:417]: Executing op: ActionStart(Name=DeleteRootDevice,,)
+MSI (s) (DC:EC) [07:47:56:417]: Executing op: CustomActionSchedule(Action=DeleteRootDevice,ActionType=3073,Source=BinaryData,Target=DeleteRootDevice,)
+MSI (s) (DC:28) [07:47:56:417]: Invoking remote custom action. DLL: C:\Windows\Installer\MSIA493.tmp, Entrypoint: DeleteRootDevice
+MSI (s) (DC:60) [07:47:56:417]: Generating random cookie.
+MSI (s) (DC:60) [07:47:56:417]: Created Custom Action Server with PID 1140 (0x474).
+MSI (s) (DC:B8) [07:47:56:433]: Running as a service.
+MSI (s) (DC:B8) [07:47:56:433]: Hello, I'm your 64bit Elevated Non-remapped custom action server.
+DeleteRootDevice:  Deleting root device
+DeleteRootDevice:  No hardware IDs found for device index: 33
+DeleteRootDevice:  No hardware IDs found for device index: 41
+MSI (s) (DC:EC) [07:47:56:511]: Executing op: ActionStart(Name=UninstallDriverRollback,,)
+DeleteRootDevice:  Found a matching device at index: 59
+MSI (s) (DC:EC) [07:47:56:511]: Executing op: CustomActionSchedule(Action=UninstallDriverRollback,ActionType=3393,Source=BinaryData,Target=InstallDriver,)
+MSI (s) (DC:EC) [07:47:56:511]: Executing op: ActionStart(Name=UninstallDriver,,)
+MSI (s) (DC:EC) [07:47:56:511]: Executing op: CustomActionSchedule(Action=UninstallDriver,ActionType=3073,Source=BinaryData,Target=UninstallDriver,)
+MSI (s) (DC:64) [07:47:56:527]: Invoking remote custom action. DLL: C:\Windows\Installer\MSIA4F2.tmp, Entrypoint: UninstallDriver
+MSI (s) (DC:EC) [07:47:56:605]: Executing op: ActionStart(Name=Wix4DeleteMachineCertificate_X64,,)
+UninstallDriver:  Unstaging driver from driver store
+MSI (s) (DC:EC) [07:47:56:605]: Executing op: CustomActionSchedule(Action=Wix4DeleteMachineCertificate_X64,ActionType=11265,Source=BinaryData,Target=**********,CustomActionData=**********)
+MSI (s) (DC:D0) [07:47:56:605]: Invoking remote custom action. DLL: C:\Windows\Installer\MSIA551.tmp, Entrypoint: DeleteMachineCertificate
+DeleteMachineCertificate:  Deleting certificate that begin with friendly name: WinUHid driver signing certificate_wixCert_
+MSI (s) (DC:EC) [07:47:56:621]: Executing op: ActionStart(Name=RemoveFiles,Description=Removing files File: [1], Directory: [9],)
+MSI (s) (DC:EC) [07:47:56:621]: Executing op: ProgressTotal(Total=3,Type=1,ByteEquivalent=175000)
+MSI (s) (DC:EC) [07:47:56:621]: Executing op: SetTargetFolder(Folder=C:\Program Files\WinUHid\)
+MSI (s) (DC:EC) [07:47:56:621]: Executing op: FileRemove(,FileName=winuhiddriver.cat,,ComponentId={B1C71449-B87C-5D54-B11D-7C8647A52759})
+MSI (s) (DC:EC) [07:47:56:621]: Verifying accessibility of file: winuhiddriver.cat
+MSI (s) (DC:EC) [07:47:56:621]: Executing op: FileRemove(,FileName=WinUHidDriver.dll,,ComponentId={B0DD4633-00AC-539E-9F5F-B08CBE4139A3})
+MSI (s) (DC:EC) [07:47:56:621]: Verifying accessibility of file: WinUHidDriver.dll
+MSI (s) (DC:EC) [07:47:56:621]: Executing op: FileRemove(,FileName=WinUHidDriver.inf,,ComponentId={6A64CC4E-D641-5A6A-980C-3B658A3C909C})
+MSI (s) (DC:EC) [07:47:56:636]: Verifying accessibility of file: WinUHidDriver.inf
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: ActionStart(Name=RemoveFolders,Description=Removing folders Folder: [1],)
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: FolderRemove(Folder=C:\Program Files\WinUHid\,Foreign=0)
+MSI (s) (DC:EC) [07:47:56:636]: Note: 1: 2318 2:  
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: ActionStart(Name=PublishProduct,Description=Publishing product information,)
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: CleanupConfigData()
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: RegisterPatchOrder(Continue=0,SequenceType=0,Remove=1)
+MSI (s) (DC:EC) [07:47:56:636]: Note: 1: 1402 2: UNKNOWN\Installer\Products\EE38E07944A964748B2D037730ECFC7E\Patches 3: 2 
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: RegisterPatchOrder(Continue=0,SequenceType=1,Remove=1)
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: CleanupConfigData(RemovingProduct=1)
+MSI (s) (DC:EC) [07:47:56:636]: Note: 1: 1402 2: HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\EE38E07944A964748B2D037730ECFC7E\Patches 3: 2 
+MSI (s) (DC:EC) [07:47:56:636]: Executing op: End(Checksum=0,ProgressTotalHDWord=0,ProgressTotalLDWord=626000)
+MSI (s) (DC:EC) [07:47:56:652]: Note: 1: 2265 2:  3: -2147287035 
+MSI (s) (DC:EC) [07:47:56:652]: User policy value 'DisableRollback' is 0
+MSI (s) (DC:EC) [07:47:56:652]: Machine policy value 'DisableRollback' is 0
+MSI (s) (DC:EC) [07:47:56:652]: Note: 1: 2265 2:  3: -2147287035 
+MSI (s) (DC:EC) [07:47:56:652]: Note: 1: 2318 2:  
+MSI (s) (DC:EC) [07:47:56:652]: Note: 1: 2318 2:  
+MSI (s) (DC:EC) [07:47:56:652]: Note: 1: 2318 2:  
+MSI (s) (DC:EC) [07:47:56:652]: No System Restore sequence number for this installation.
+MSI (s) (DC:EC) [07:47:56:652]: Unlocking Server
+MSI (s) (DC:EC) [07:47:56:667]: PROPERTY CHANGE: Deleting UpdateStarted property. Its current value is '1'.
+Action ended 7:47:56: InstallFinalize. Return value 1.
+Action ended 7:47:56: INSTALL. Return value 1.
+Property(S): ALLUSERS = 1
+Property(S): PackageId = WinUHid.WinUHid
+Property(S): Manufacturer = WinUHid Project
+Property(S): ProductCode = {970E83EE-9A44-4746-B8D2-307703CECFE7}
+Property(S): ProductLanguage = 1033
+Property(S): ProductName = WinUHid
+Property(S): ProductVersion = 1.0.0.0
+Property(S): UpgradeCode = {4DC77BCC-A072-5A7D-BC00-89D2E0A6665F}
+Property(S): SecureCustomProperties = WIX_DOWNGRADE_DETECTED;WIX_UPGRADE_DETECTED
+Property(S): MsiHiddenProperties = Wix4AddMachineCertificate_X64;Wix4AddUserCertificate_X64;Wix4DeleteMachineCertificate_X64;Wix4DeleteUserCertificate_X64;Wix4RollbackAddMachineCertificate_X64;Wix4RollbackAddUserCertificate_X64;Wix4RollbackDeleteMachineCertificate_X64;Wix4RollbackDeleteUserCertificate_X64
+Property(S): INSTALLFOLDER = C:\Program Files\WinUHid\
+Property(S): ProgramFiles6432Folder = C:\Program Files\
+Property(S): ProgramFiles64Folder = C:\Program Files\
+Property(S): TARGETDIR = D:\
+Property(S): Wix4DeleteMachineCertificate_X64 = **********
+Property(S): REMOVE = ALL
+Property(S): MsiLogFileLocation = D:\a\WinUHid\WinUHid\out\kit\uninstall.log
+Property(S): PackageCode = {BD4165D7-50F1-49B1-A6D5-2778880DAD6B}
+Property(S): ProductState = 5
+Property(S): REBOOT = ReallySuppress
+Property(S): CURRENTDIRECTORY = D:\a\WinUHid\WinUHid\out\kit
+Property(S): CLIENTUILEVEL = 3
+Property(S): CLIENTPROCESSID = 3948
+Property(S): PRODUCTLANGUAGE = 1033
+Property(S): VersionDatabase = 500
+Property(S): VersionMsi = 5.00
+Property(S): VersionNT = 603
+Property(S): VersionNT64 = 603
+Property(S): WindowsBuild = 9600
+Property(S): ServicePackLevel = 0
+Property(S): ServicePackLevelMinor = 0
+Property(S): MsiNTProductType = 3
+Property(S): MsiNTSuiteDataCenter = 1
+Property(S): WindowsFolder = C:\Windows\
+Property(S): WindowsVolume = C:\
+Property(S): System64Folder = C:\Windows\system32\
+Property(S): SystemFolder = C:\Windows\SysWOW64\
+Property(S): RemoteAdminTS = 1
+Property(S): TempFolder = C:\Users\RUNNER~1\AppData\Local\Temp\
+Property(S): ProgramFilesFolder = C:\Program Files (x86)\
+Property(S): CommonFilesFolder = C:\Program Files (x86)\Common Files\
+Property(S): CommonFiles64Folder = C:\Program Files\Common Files\
+Property(S): AppDataFolder = C:\Users\runneradmin\AppData\Roaming\
+Property(S): FavoritesFolder = C:\Users\runneradmin\Favorites\
+Property(S): NetHoodFolder = C:\Users\runneradmin\AppData\Roaming\Microsoft\Windows\Network Shortcuts\
+Property(S): PersonalFolder = C:\Users\runneradmin\Documents\
+Property(S): PrintHoodFolder = C:\Users\runneradmin\AppData\Roaming\Microsoft\Windows\Printer Shortcuts\
+Property(S): RecentFolder = C:\Users\runneradmin\AppData\Roaming\Microsoft\Windows\Recent\
+Property(S): SendToFolder = C:\Users\runneradmin\AppData\Roaming\Microsoft\Windows\SendTo\
+Property(S): TemplateFolder = C:\ProgramData\Microsoft\Windows\Templates\
+Property(S): CommonAppDataFolder = C:\ProgramData\
+Property(S): LocalAppDataFolder = C:\Users\runneradmin\AppData\Local\
+Property(S): MyPicturesFolder = C:\Users\runneradmin\Pictures\
+Property(S): AdminToolsFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\
+Property(S): StartupFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\
+Property(S): ProgramMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\Programs\
+Property(S): StartMenuFolder = C:\ProgramData\Microsoft\Windows\Start Menu\
+Property(S): DesktopFolder = C:\Users\Public\Desktop\
+Property(S): FontsFolder = C:\Windows\Fonts\
+Property(S): GPTSupport = 1
+Property(S): OLEAdvtSupport = 1
+Property(S): ShellAdvtSupport = 1
+Property(S): MsiAMD64 = 25
+Property(S): Msix64 = 25
+Property(S): Intel = 25
+Property(S): PhysicalMemory = 16379
+Property(S): VirtualMemory = 16856
+Property(S): AdminUser = 1
+Property(S): MsiTrueAdminUser = 1
+Property(S): LogonUser = runneradmin
+Property(S): UserSID = S-1-5-21-3827877701-3061038111-106515639-500
+Property(S): UserLanguageID = 1033
+Property(S): ComputerName = runnervmdlhio
+Property(S): SystemLanguageID = 1033
+Property(S): ScreenX = 1024
+Property(S): ScreenY = 768
+Property(S): CaptionHeight = 19
+Property(S): BorderTop = 1
+Property(S): BorderSide = 1
+Property(S): TextHeight = 16
+Property(S): TextInternalLeading = 3
+Property(S): ColorBits = 32
+Property(S): TTCSupport = 1
+Property(S): Time = 7:47:56
+Property(S): Date = 10/3/2026
+Property(S): MsiNetAssemblySupport = 4.8.9037.0
+Property(S): MsiWin32AssemblySupport = 6.3.20348.2849
+Property(S): RedirectedDllSupport = 2
+Property(S): MsiRunningElevated = 1
+Property(S): Privileged = 1
+Property(S): Installed = 00:00:00
+Property(S): DATABASE = C:\Windows\Installer\292cf.msi
+Property(S): OriginalDatabase = D:\a\WinUHid\WinUHid\out\kit\WinUHid-dev-test-x64.msi
+Property(S): UILevel = 2
+Property(S): Preselected = 1
+Property(S): ACTION = INSTALL
+Property(S): ROOTDRIVE = D:\
+Property(S): CostingComplete = 1
+Property(S): OutOfDiskSpace = 0
+Property(S): OutOfNoRbDiskSpace = 0
+Property(S): PrimaryVolumeSpaceAvailable = 0
+Property(S): PrimaryVolumeSpaceRequired = 0
+Property(S): PrimaryVolumeSpaceRemaining = 0
+Property(S): INSTALLLEVEL = 1
+MSI (s) (DC:EC) [07:47:56:683]: Note: 1: 1724 
+MSI (s) (DC:EC) [07:47:56:683]: Note: 1: 2205 2:  3: Error 
+MSI (s) (DC:EC) [07:47:56:683]: Note: 1: 2228 2:  3: Error 4: SELECT `Message` FROM `Error` WHERE `Error` = 1724 
+MSI (s) (DC:EC) [07:47:56:683]: Note: 1: 2205 2:  3: Error 
+MSI (s) (DC:EC) [07:47:56:683]: Note: 1: 2228 2:  3: Error 4: SELECT `Message` FROM `Error` WHERE `Error` = 1709 
+MSI (s) (DC:EC) [07:47:56:683]: Product: WinUHid -- Removal completed successfully.
+
+MSI (s) (DC:EC) [07:47:56:683]: Windows Installer removed the product. Product Name: WinUHid. Product Version: 1.0.0.0. Product Language: 1033. Manufacturer: WinUHid Project. Removal success or error status: 0.
+
+MSI (s) (DC:EC) [07:47:56:683]: Deferring clean up of packages/files, if any exist
+MSI (s) (DC:EC) [07:47:56:683]: MainEngineThread is returning 0
+MSI (s) (DC:BC) [07:47:56:699]: RESTART MANAGER: Session closed.
+MSI (s) (DC:BC) [07:47:56:699]: No System Restore sequence number for this installation.
+=== Logging stopped: 10/3/2026  7:47:56 ===
+MSI (s) (DC:BC) [07:47:56:699]: User policy value 'DisableRollback' is 0
+MSI (s) (DC:BC) [07:47:56:699]: Machine policy value 'DisableRollback' is 0
+MSI (s) (DC:BC) [07:47:56:699]: Incrementing counter to disable shutdown. Counter after increment: 0
+MSI (s) (DC:BC) [07:47:56:699]: Note: 1: 1402 2: HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Installer\Rollback\Scripts 3: 2 
+MSI (s) (DC:BC) [07:47:56:714]: Note: 1: 2265 2:  3: -2147287035 
+MSI (s) (DC:BC) [07:47:56:714]: Note: 1: 1402 2: HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Installer\Rollback\Scripts 3: 2 
+MSI (s) (DC:BC) [07:47:56:714]: Decrementing counter to disable shutdown. If counter >= 0, shutdown will be denied.  Counter after decrement: -1
+MSI (s) (DC:BC) [07:47:56:714]: Post-install cleanup: removing installer file 'C:\Windows\Installer\292cf.msi'
+MSI (s) (DC:BC) [07:47:56:714]: Destroying RemoteAPI object.
+MSI (s) (DC:60) [07:47:56:714]: Custom Action Manager thread ending.
+MSI (c) (6C:44) [07:47:56:714]: Decrementing counter to disable shutdown. If counter >= 0, shutdown will be denied.  Counter after decrement: -1
+MSI (c) (6C:44) [07:47:56:714]: MainEngineThread is returning 0
+=== Verbose logging stopped: 10/3/2026  7:47:56 ===
+
