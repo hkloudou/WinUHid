@@ -79,6 +79,15 @@ public static class Probe
         return Describe(GetAncestor(WindowFromPoint(p), 2));
     }
     public static string Foreground() { return Describe(GetForegroundWindow()); }
+    // Minimizes the top-level window at this point and says which one it was.
+    public static IntPtr MinimizeWindowAt(int x, int y)
+    {
+        POINT p; p.X = x; p.Y = y;
+        IntPtr window = GetAncestor(WindowFromPoint(p), 2);
+        if (window != IntPtr.Zero) ShowWindow(window, 6); // SW_MINIMIZE
+        return window;
+    }
+    public static void Restore(IntPtr window) { ShowWindow(window, 4); } // SW_SHOWNOACTIVATE
     public static void BringToFront(IntPtr window)
     {
         // A process that was started hidden (as build steps are) gets its first window hidden
@@ -185,16 +194,36 @@ function Save-Desktop {
     }
 }
 
+$script:minimized = @()
 function Show-TestWindow {
-    # Puts the test window in front and says what a click at the test points would hit.
+    # Puts the test window in front. Another window that still covers it (the build agent's own
+    # console sits on top of everything) is minimized for the duration of the test, so that the
+    # clicks go to the test window and to nothing else. Returns whether that worked.
     [Probe]::BringToFront([IntPtr]$ui.Handle)
     Start-Sleep -Milliseconds 300
+    foreach ($point in @($ui.PadX, $ui.PadY), @($ui.BoxX, $ui.BoxY)) {
+        for ($i = 0; $i -lt 4 -and [Probe]::WindowAt($point[0], $point[1]) -notmatch 'WinUHid HTTP test window'; $i++) {
+            Add-Report "- minimizing a window that covers the test window: $([Probe]::WindowAt($point[0], $point[1]))"
+            $script:minimized += [Probe]::MinimizeWindowAt($point[0], $point[1])
+            Start-Sleep -Milliseconds 400
+            [Probe]::BringToFront([IntPtr]$ui.Handle)
+            Start-Sleep -Milliseconds 300
+        }
+    }
     $atPad = [Probe]::WindowAt($ui.PadX, $ui.PadY)
     $atBox = [Probe]::WindowAt($ui.BoxX, $ui.BoxY)
-    Check 'test window is visible at the test points' ($atPad -match 'WinUHid HTTP test window' -and $atBox -match 'WinUHid HTTP test window') `
-        "at the click point: $atPad; at the text box: $atBox"
+    $visible = ($atPad -match 'WinUHid HTTP test window' -and $atBox -match 'WinUHid HTTP test window')
+    Check 'test window is what a click at the test points would hit' $visible "at the click point: $atPad; at the text box: $atBox"
+    return $visible
 }
-Show-TestWindow
+if (-not (Show-TestWindow)) {
+    # Without the window, clicks and typing would land on whatever else is there. Do not send any.
+    Save-Desktop '64-http-desktop-before.png'
+    $script:minimized | ForEach-Object { [Probe]::Restore($_) }
+    $ui.Close = $true
+    Add-Notice 'HTTP sample' 'FAILED - the test window could not be shown, so no input was sent'
+    exit 1
+}
 Save-Desktop '64-http-desktop-before.png'
 
 # --- the checks that are the same for both ways of starting the program ----------------------
@@ -333,7 +362,7 @@ $log = Join-Path $LogDir '63-http-system.log'
 $up = Wait-Until { (Invoke-Api '/status').ok } 20
 Check 'start' $up 'started through a scheduled task that runs as SYSTEM'
 $ui.Events = ''
-Show-TestWindow
+if (-not (Show-TestWindow)) { $up = $false }
 if ($up) {
     $status = Test-Api 'SYSTEM:'
     Add-Report "- the window recorded: $($ui.Events)$(if ($ui.Errors) { " errors: $($ui.Errors)" })"
@@ -349,6 +378,7 @@ if ($up) {
 & schtasks.exe /delete /tn $taskName /f 2>&1 | Out-Host
 
 # --- done --------------------------------------------------------------------------------------
+$script:minimized | ForEach-Object { [Probe]::Restore($_) }
 $ui.Close = $true
 [void](Wait-Until { $windowRun.IsCompleted } 5)
 Add-Notice 'HTTP sample' $(if ($script:failed) { 'FAILED - see the checks in the report' } else { 'all checks passed, as administrator and as SYSTEM' })
