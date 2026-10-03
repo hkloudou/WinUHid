@@ -34,6 +34,23 @@ public static class WinUHidNative
     [DllImport("user32.dll")]
     public static extern int GetSystemMetrics(int index);
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SYSTEM_CODEINTEGRITY_INFORMATION { public uint Length; public uint CodeIntegrityOptions; }
+    [DllImport("ntdll.dll")]
+    public static extern int NtQuerySystemInformation(int infoClass, ref SYSTEM_CODEINTEGRITY_INFORMATION info, int length, out int returnLength);
+
+    // The code integrity options Windows is running with right now, or -1 when they cannot be read.
+    // Bit 0x02 is set while the machine runs in test-signing mode ("Test Mode").
+    public static int CodeIntegrityOptions()
+    {
+        SYSTEM_CODEINTEGRITY_INFORMATION info = new SYSTEM_CODEINTEGRITY_INFORMATION();
+        info.Length = 8;
+        int returned;
+        int status = NtQuerySystemInformation(103, ref info, 8, out returned);   // SystemCodeIntegrityInformation
+        if (status != 0) return -1;
+        return (int)info.CodeIntegrityOptions;
+    }
+
     // True when this program runs inside a Remote Desktop session.
     public static bool IsRemoteSession()
     {
@@ -145,6 +162,16 @@ try {
     Add-Type -TypeDefinition $native
     $env:PATH = "$libDir;$env:PATH"
     [void][WinUHidNative]::SetDllDirectoryW($libDir)
+
+    # Whether this machine can prove "installs on a normal machine": it must not be in test mode.
+    $ci = [WinUHidNative]::CodeIntegrityOptions()
+    if ($ci -lt 0) { Info 'Test mode: could not be determined.' }
+    elseif ($ci -band 0x02) { Info 'Test mode: ON. This machine accepts test-signed drivers, so it does not prove a normal machine would.' }
+    else { Info 'Test mode: off (normal machine).' }
+    $secureBoot = 'unknown'
+    try { if (Confirm-SecureBootUEFI -ErrorAction Stop) { $secureBoot = 'on' } else { $secureBoot = 'off' } }
+    catch { $secureBoot = 'not available (legacy BIOS boot or not readable)' }
+    Info "Secure Boot: $secureBoot."
 
     # Virtual devices behave like hardware plugged into the machine: their input goes to the
     # physical console session. A Remote Desktop session has its own input path and does not see it.
