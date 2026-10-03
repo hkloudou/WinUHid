@@ -351,6 +351,17 @@ if ($up) {
     Stop-Process -Id $third.Id -Force
     $gone = Wait-Until { @(Get-InputDevices | Where-Object { $_ -notin $baseline }).Count -eq 0 } 15
     Check 'killing the process removes the devices' $gone "leftover device entries: $(@(Get-InputDevices | Where-Object { $_ -notin $baseline }).Count)"
+
+    # -screen: the size is given by hand and nothing is read back. Moves must still land, and
+    # the answer must say that arrival was not checked.
+    $fourth = Start-Process -FilePath $exe -ArgumentList '-screen', ([Probe]::Screen()), '-log', (Join-Path $LogDir '62-http-admin-screen-flag.log') -PassThru -WindowStyle Hidden
+    [void](Wait-Until { (Invoke-Api '/status').ok } 15)
+    $landed = Wait-Until { $script:answer = Invoke-Api '/mouse/move/300/200'; Start-Sleep -Milliseconds 200; [Probe]::Cursor() -eq '300,200' } 10
+    Check 'with -screen the pointer still lands and the answer says it was not checked' `
+        ($landed -and $script:answer.status -eq 200 -and $script:answer.verified -eq $false) `
+        "pointer at $([Probe]::Cursor()); HTTP $($script:answer.status), verified=$($script:answer.verified)"
+    [void](Invoke-Api '/quit')
+    [void](Wait-Until { $fourth.HasExited } 10)
 }
 Get-Process -Name 'winuhid-http' -ErrorAction SilentlyContinue | Stop-Process -Force
 

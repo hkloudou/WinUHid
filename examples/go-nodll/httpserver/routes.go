@@ -216,10 +216,18 @@ func (s *server) at(then func() error) http.HandlerFunc {
 			if err := s.pointer.MoveToPixel(x, y, screen.Width, screen.Height); err != nil {
 				return err
 			}
+			if screen.Manual {
+				// Started with -screen: nothing is read back, so arrival cannot be checked.
+				body["verified"] = false
+				body["note"] = "started with -screen: where the pointer ended up was not checked"
+				time.Sleep(20 * time.Millisecond)
+				return then()
+			}
 			wantX, wantY := min(max(x, 0), screen.Width-1), min(max(y, 0), screen.Height-1)
 			if err := waitForPointer(wantX, wantY, body); err != nil {
 				return err
 			}
+			body["verified"] = true
 			return then()
 		})
 		answer(w, err, body)

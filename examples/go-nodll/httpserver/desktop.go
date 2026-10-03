@@ -41,7 +41,12 @@ type desktopInfo struct {
 	X, Y          int  // pointer position
 	HasPointer    bool // false when the pointer cannot be read (for example on the lock screen)
 	Source        string
+	Manual        bool // the size was given with -screen; nothing was read, so nothing can be checked
 }
+
+// manualScreen is set by the -screen flag. When it is, the screen is never read: the given
+// size is used, and where the pointer ends up is not checked.
+var manualScreen *desktopInfo
 
 // ownSessionID returns the session this process runs in.
 func ownSessionID() uint32 {
@@ -58,31 +63,61 @@ func consoleSessionID() uint32 {
 
 var dpiAware sync.Once
 
-// readDesktopDirect reads the values in this process's own session.
-func readDesktopDirect() desktopInfo {
+// readDesktopDirect reads the values in this process's own session. note, when given, is
+// told about each step as it is reached.
+func readDesktopDirect(note func(step string)) desktopInfo {
+	if note == nil {
+		note = func(string) {}
+	}
 	// Without this, Windows reports scaled-down numbers on screens that use display scaling.
 	dpiAware.Do(func() { procSetProcessDPIAware.Call() })
+	note("connected to the desktop")
 
 	width, _, _ := procGetSystemMetrics.Call(0)  // SM_CXSCREEN
 	height, _, _ := procGetSystemMetrics.Call(1) // SM_CYSCREEN
 	info := desktopInfo{Width: int(width), Height: int(height), Source: "read directly"}
+	note(fmt.Sprintf("screen size read (%dx%d)", info.Width, info.Height))
 
 	var position struct{ X, Y int32 }
 	if ok, _, _ := procGetCursorPos.Call(uintptr(unsafe.Pointer(&position))); ok != 0 {
 		info.X, info.Y, info.HasPointer = int(position.X), int(position.Y), true
 	}
+	note(fmt.Sprintf("pointer read (readable=%v)", info.HasPointer))
 	return info
 }
 
+// progressFile is where the short-lived copy notes how far it got, next to its answer file.
+func progressFile(answerPath string) string { return answerPath + ".progress" }
+
 // writeDesktopInfo is what the short-lived copy does: read, write to the given file, exit.
+// It notes each step it reaches in a second file, so that a copy that gets stuck can be
+// diagnosed from the outside.
 func writeDesktopInfo(path string) error {
-	info := readDesktopDirect()
+	note := func(step string) {
+		if file, err := os.OpenFile(progressFile(path), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600); err == nil {
+			file.WriteString(step + "; ")
+			file.Close()
+		}
+	}
+	note("started")
+	info := readDesktopDirect(note)
 	pointer := 0
 	if info.HasPointer {
 		pointer = 1
 	}
 	text := fmt.Sprintf("%d %d %d %d %d\n", info.Width, info.Height, info.X, info.Y, pointer)
-	return os.WriteFile(path, []byte(text), 0o600)
+	err := os.WriteFile(path, []byte(text), 0o600)
+	note(fmt.Sprintf("answer written (error=%v)", err))
+	return err
+}
+
+// helperProgress says how far a short-lived copy got, for error messages.
+func helperProgress(answerPath string) string {
+	data, err := os.ReadFile(progressFile(answerPath))
+	if err != nil || len(data) == 0 {
+		return "it never reached its first instruction (it was blocked, suspended or failed to start)"
+	}
+	return "it got as far as: " + string(data)
 }
 
 var (
@@ -94,12 +129,15 @@ var (
 // queryDesktop returns the screen size and pointer position of the console session.
 // maxAge allows a recent answer to be reused, which matters when each answer costs a process start.
 func queryDesktop(maxAge time.Duration) (desktopInfo, error) {
+	if manualScreen != nil {
+		return *manualScreen, nil
+	}
 	own, console := ownSessionID(), consoleSessionID()
 	if console == noSession {
 		return desktopInfo{}, errors.New("no session is attached to the screen right now")
 	}
 	if own == console {
-		return readDesktopDirect(), nil
+		return readDesktopDirect(nil), nil
 	}
 
 	desktopMu.Lock()
@@ -126,8 +164,9 @@ func queryDesktopFromSession(session uint32) (desktopInfo, error) {
 		maximumAllowed       = 0x02000000
 		securityImpersonate  = 2
 		tokenPrimary         = 1
-		tokenSessionID       = 12 // TOKEN_INFORMATION_CLASS: TokenSessionId
-		createNoWindow       = 0x08000000
+		tokenSessionID       = 12         // TOKEN_INFORMATION_CLASS: TokenSessionId
+		detachedProcess      = 0x00000008 // no console at all: the copy needs none
+		helperLimit          = 5000       // milliseconds
 		waitObject0          = 0
 	)
 
@@ -137,6 +176,7 @@ func queryDesktopFromSession(session uint32) (desktopInfo, error) {
 	}
 	out := filepath.Join(os.TempDir(), fmt.Sprintf("winuhid-http-desktop-%d-%d.txt", os.Getpid(), time.Now().UnixNano()))
 	defer os.Remove(out)
+	defer os.Remove(progressFile(out))
 
 	// A copy of our own token, re-targeted at the other session.
 	var own syscall.Token
@@ -164,20 +204,24 @@ func queryDesktopFromSession(session uint32) (desktopInfo, error) {
 	startup := syscall.StartupInfo{Desktop: desktop}
 	startup.Cb = uint32(unsafe.Sizeof(startup))
 	var process syscall.ProcessInformation
-	if err := syscall.CreateProcessAsUser(copyOfToken, nil, commandLine, nil, nil, false, createNoWindow, nil, nil, &startup, &process); err != nil {
+	if err := syscall.CreateProcessAsUser(copyOfToken, nil, commandLine, nil, nil, false, detachedProcess, nil, nil, &startup, &process); err != nil {
 		return desktopInfo{}, fmt.Errorf("start helper in session %d: %w", session, err)
 	}
 	defer syscall.CloseHandle(process.Thread)
 	defer syscall.CloseHandle(process.Process)
 
-	if event, _ := syscall.WaitForSingleObject(process.Process, 3000); event != waitObject0 {
+	if event, _ := syscall.WaitForSingleObject(process.Process, helperLimit); event != waitObject0 {
 		syscall.TerminateProcess(process.Process, 1)
-		return desktopInfo{}, errors.New("the helper did not answer within 3 seconds")
+		return desktopInfo{}, fmt.Errorf("the helper (pid %d) did not answer within %d seconds; %s",
+			process.ProcessId, helperLimit/1000, helperProgress(out))
 	}
 
 	data, err := os.ReadFile(out)
 	if err != nil {
-		return desktopInfo{}, fmt.Errorf("the helper left no answer: %w", err)
+		var exitCode uint32
+		syscall.GetExitCodeProcess(process.Process, &exitCode)
+		return desktopInfo{}, fmt.Errorf("the helper (pid %d) ended with exit code %#x and left no answer; %s",
+			process.ProcessId, exitCode, helperProgress(out))
 	}
 	var info desktopInfo
 	var pointer int

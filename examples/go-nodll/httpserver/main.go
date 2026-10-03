@@ -46,6 +46,7 @@ const (
 func main() {
 	address := flag.String("addr", "127.0.0.1:8765", "address to listen on")
 	logFile := flag.String("log", "", "also write the log to this file (useful when there is no console window)")
+	screen := flag.String("screen", "", "screen size as WIDTHxHEIGHT, e.g. 1920x1080: use this instead of reading the screen; pointer arrival is then not checked")
 	desktopInfoOut := flag.String("desktop-info", "", "internal: write screen size and pointer position to this file and exit")
 	flag.Parse()
 
@@ -64,6 +65,15 @@ func main() {
 		}
 		defer file.Close()
 		log.SetOutput(io.MultiWriter(os.Stderr, file))
+	}
+
+	if *screen != "" {
+		var width, height int
+		if _, err := fmt.Sscanf(*screen, "%dx%d", &width, &height); err != nil || width <= 0 || height <= 0 {
+			log.Fatalf("-screen must look like 1920x1080")
+		}
+		manualScreen = &desktopInfo{Width: width, Height: height, Manual: true, Source: "given with -screen; nothing is read or checked"}
+		log.Printf("screen size given as %dx%d: the screen is not read and pointer arrival is not checked", width, height)
 	}
 
 	if err := run(*address); err != nil {
