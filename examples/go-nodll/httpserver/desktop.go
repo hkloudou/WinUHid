@@ -86,6 +86,28 @@ func readDesktopDirect(note func(step string)) desktopInfo {
 	return info
 }
 
+// helperArgument is how the short-lived copy is told what it is: the program is started as
+//
+//	program.exe -desktop-info <answer file>
+const helperArgument = "-desktop-info"
+
+// runAsDesktopHelper must be the very first thing main does. It reports whether this process
+// is the short-lived copy; if it is, the work has been done and main must return at once.
+//
+// When this code is built into a larger program, nothing may come before this call: no
+// command-line parsing that rejects unknown arguments, no window, no message box, no
+// single-instance check. Anything that makes the copy linger or ask a question makes the
+// main program wait for it in vain.
+func runAsDesktopHelper() bool {
+	if len(os.Args) != 3 || os.Args[1] != helperArgument {
+		return false
+	}
+	if err := writeDesktopInfo(os.Args[2]); err != nil {
+		os.Exit(1)
+	}
+	return true
+}
+
 // progressFile is where the short-lived copy notes how far it got, next to its answer file.
 func progressFile(answerPath string) string { return answerPath + ".progress" }
 
@@ -196,7 +218,7 @@ func queryDesktopFromSession(session uint32) (desktopInfo, error) {
 		return desktopInfo{}, fmt.Errorf("point token at session %d (only SYSTEM may do this): %w", session, callErr)
 	}
 
-	commandLine, err := syscall.UTF16PtrFromString(fmt.Sprintf(`"%s" -desktop-info "%s"`, exe, out))
+	commandLine, err := syscall.UTF16PtrFromString(fmt.Sprintf(`"%s" %s "%s"`, exe, helperArgument, out))
 	if err != nil {
 		return desktopInfo{}, err
 	}

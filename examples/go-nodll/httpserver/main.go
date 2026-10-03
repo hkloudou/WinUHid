@@ -44,19 +44,16 @@ const (
 )
 
 func main() {
+	// First of all: is this the short-lived copy that reads the screen from inside the user's
+	// session? Then it has done its work and must end here, before anything else happens.
+	if runAsDesktopHelper() {
+		return
+	}
+
 	address := flag.String("addr", "127.0.0.1:8765", "address to listen on")
 	logFile := flag.String("log", "", "also write the log to this file (useful when there is no console window)")
 	screen := flag.String("screen", "", "screen size as WIDTHxHEIGHT, e.g. 1920x1080: use this instead of reading the screen; pointer arrival is then not checked")
-	desktopInfoOut := flag.String("desktop-info", "", "internal: write screen size and pointer position to this file and exit")
 	flag.Parse()
-
-	// The short-lived copy that reads the screen from inside the user's session.
-	if *desktopInfoOut != "" {
-		if err := writeDesktopInfo(*desktopInfoOut); err != nil {
-			os.Exit(1)
-		}
-		return
-	}
 
 	if *logFile != "" {
 		file, err := os.OpenFile(*logFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
