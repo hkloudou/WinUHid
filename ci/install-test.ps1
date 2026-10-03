@@ -132,6 +132,22 @@ Add-Report '```'
 Add-Notice 'Go sample' "exit code $rc; pass=$(@($goSample -match '^\[PASS\]').Count), warn=$(@($goSample -match '^\[WARN\]').Count), fail=$(@($goSample -match '^\[FAIL\]').Count)"
 if ($rc -ne 0) { $failed = $true }
 
+# --- 2c. Go sample without any DLL: talks to the driver directly -----------------------------
+# Run from a folder that holds nothing but the program, so it cannot be picking up a DLL.
+Add-Report "## Go sample without DLLs (examples\go-nodll\winuhid-nodll-sample.exe -click -strict)"
+$alone = Join-Path $env:RUNNER_TEMP 'nodll-alone'
+Remove-Item -Path $alone -Recurse -Force -ErrorAction SilentlyContinue
+New-Item -ItemType Directory -Force -Path $alone | Out-Null
+Copy-Item -Path (Join-Path $KitDir 'examples\go-nodll\winuhid-nodll-sample.exe') -Destination $alone
+Add-Report "- run from $alone, which contains: $((Get-ChildItem $alone | ForEach-Object Name) -join ', ')"
+$rc = Invoke-WithTimeout -FilePath (Join-Path $alone 'winuhid-nodll-sample.exe') -Arguments '-click', '-strict' -LogName '26-go-nodll-sample.txt' -TimeoutSeconds 120
+$goNoDll = @(Get-Content (Join-Path $LogDir '26-go-nodll-sample.txt') -ErrorAction SilentlyContinue)
+Add-Report '```'
+$goNoDll | ForEach-Object { Add-Report $_ }
+Add-Report '```'
+Add-Notice 'Go sample without DLLs' "exit code $rc; pass=$(@($goNoDll -match '^\[PASS\]').Count), warn=$(@($goNoDll -match '^\[WARN\]').Count), fail=$(@($goNoDll -match '^\[FAIL\]').Count)"
+if ($rc -ne 0) { $failed = $true }
+
 # --- 3. Evidence for diagnosis --------------------------------------------------------------
 $setupLog = 'C:\Windows\INF\setupapi.dev.log'
 if (Test-Path $setupLog) {

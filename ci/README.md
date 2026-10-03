@@ -5,7 +5,7 @@
 | 阶段 | 在哪台机器 | 做什么 |
 | --- | --- | --- |
 | build | Server 2022 | 编译驱动和调用库；临时生成一张测试证书给驱动包签名；打包 MSI；编译 Go 示例；组装测试包 |
-| install-test | Server 2022、Server 2025 各一台干净机器 | 按测试人员的步骤走一遍：`install.cmd` → `selftest.cmd` → Go 示例程序 → `uninstall.cmd` |
+| install-test | Server 2022、Server 2025 各一台干净机器 | 按测试人员的步骤走一遍：`install.cmd` → `selftest.cmd` → 两个 Go 示例程序（调 DLL 的、不带 DLL 的）→ `uninstall.cmd` |
 | report | — | 把各阶段的报告和日志摘要写到 `ci-results` 分支 |
 | release | — | 全部通过后，更新 Releases 里的 `dev-test` 预发布 |
 
