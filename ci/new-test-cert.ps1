@@ -1,4 +1,6 @@
 # Creates a throwaway self-signed code signing certificate for this build only.
+# It is valid for 100 years on purpose: a test build must never stop working because of a date,
+# which would only confuse whoever picks this up later. It is still a test certificate.
 # The private key stays in the runner's certificate store and disappears with the runner.
 # The public certificate replaces the upstream author's certificate that the installer embeds.
 . "$PSScriptRoot/lib.ps1"
@@ -9,7 +11,7 @@ $subject = "CN=WinUHid Dev Test $runId, O=Test signing only - not for production
 
 $created = New-SelfSignedCertificate -Type CodeSigningCert -Subject $subject `
     -CertStoreLocation 'Cert:\CurrentUser\My' -KeyAlgorithm RSA -KeyLength 3072 `
-    -HashAlgorithm SHA256 -KeyExportPolicy NonExportable -NotAfter (Get-Date).AddDays(365)
+    -HashAlgorithm SHA256 -KeyExportPolicy NonExportable -NotAfter (Get-Date).AddYears(100)
 $thumbprint = $created.Thumbprint
 
 # Re-read through the provider so the rest does not depend on how the PKI module returned the object.

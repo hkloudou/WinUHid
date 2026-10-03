@@ -1,6 +1,8 @@
 @echo off
 rem WinUHid dev test build - installer for TEST MACHINES ONLY.
 rem Trusts this build's throwaway test certificate, then installs the driver package.
+rem This file is UTF-8 without a byte order mark; the next line makes the console read it that way.
+chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
 
@@ -8,9 +10,22 @@ fltmc >nul 2>&1
 if errorlevel 1 goto needadmin
 
 echo.
-echo  WinUHid dev test build - for test machines only
+echo  ======================================================================
+echo   注意：这是测试版本，驱动用的是自签名的测试证书，不是正式签名。
+echo   只能安装在测试机上。请勿分发给用户，请勿用于生产环境。
+echo.
+echo   NOTICE: this is a TEST build. The driver is signed with a self-signed
+echo   test certificate, not a production signature.
+echo   Install it on test machines only. Do NOT distribute it to users.
+echo  ======================================================================
+echo.
+if defined CI goto confirmed
+echo  按任意键继续安装；不想安装请直接关闭本窗口。
+echo  Press any key to install, or close this window to cancel.
+pause >nul
 echo.
 
+:confirmed
 echo [1/3] Trusting this build's test certificate...
 certutil -addstore -f Root "%~dp0WinUHid-dev-test.cer" >nul
 if errorlevel 1 goto certfail
