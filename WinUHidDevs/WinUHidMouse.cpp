@@ -207,16 +207,22 @@ WINUHID_API BOOL WinUHidMouseReportButton(PWINUHID_MOUSE_DEVICE Mouse, UCHAR But
 {
 	BASIC_REPORT report = {};
 
-	if (ButtonIndex >= 5) {
+	if (ButtonIndex < WUHM_BUTTON_LEFT || ButtonIndex > WUHM_BUTTON_X2) {
 		SetLastError(ERROR_INVALID_PARAMETER);
 		return FALSE;
 	}
 
+	//
+	// Button indexes are 1-based (WUHM_BUTTON_LEFT is 1), while the button bits in the
+	// report are 0-based (bit 0 is the first button).
+	//
+	UCHAR mask = (UCHAR)(1 << (ButtonIndex - 1));
+
 	if (Down) {
-		Mouse->Buttons |= 1 << ButtonIndex;
+		Mouse->Buttons |= mask;
 	}
 	else {
-		Mouse->Buttons &= ~(1 << ButtonIndex);
+		Mouse->Buttons &= ~mask;
 	}
 
 	report.Id = BASIC_REPORT_ID;

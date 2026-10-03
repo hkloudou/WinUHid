@@ -16,6 +16,28 @@ Copy-Item -Path (Join-Path $RepoRoot 'WinUHid\WinUHid.h') -Destination (Join-Pat
 Get-ChildItem -Path (Join-Path $RepoRoot 'WinUHidDevs') -Filter 'WinUHid*.h' |
     Copy-Item -Destination (Join-Path $KitDir 'include')
 
+# Go sample: source plus a ready-built program, so it can be tried without installing Go.
+$goSrc = Join-Path $RepoRoot 'examples\go'
+$goDst = Join-Path $KitDir 'examples\go'
+New-Item -ItemType Directory -Force -Path $goDst | Out-Null
+Copy-Item -Path (Join-Path $goSrc '*') -Destination $goDst -Recurse -Force
+Push-Location $goSrc
+try {
+    $env:CGO_ENABLED = '0'
+    $env:GOOS = 'windows'
+    $env:GOARCH = 'amd64'
+    $goVersion = (& go version) -join ' '
+    & go vet ./... | Out-Host
+    if ($LASTEXITCODE -ne 0) { throw 'go vet failed for the Go sample.' }
+    & go test ./... | Out-Host
+    if ($LASTEXITCODE -ne 0) { throw 'go test failed for the Go sample.' }
+    & go build -trimpath -o (Join-Path $goDst 'winuhid-sample.exe') . | Out-Host
+    if ($LASTEXITCODE -ne 0) { throw 'go build failed for the Go sample.' }
+} finally {
+    Pop-Location
+}
+Add-Notice 'Go sample' "built with $goVersion"
+
 # Lets a test report be matched to the exact build it came from.
 @(
     "commit $env:GITHUB_SHA",
@@ -25,7 +47,8 @@ Get-ChildItem -Path (Join-Path $RepoRoot 'WinUHidDevs') -Filter 'WinUHid*.h' |
 ) | Set-Content -Path (Join-Path $KitDir 'BUILD.txt') -Encoding ascii
 
 $required = 'WinUHid-dev-test-x64.msi', 'WinUHid-dev-test.cer', 'cert-thumbprint.txt', 'install.cmd', 'selftest.cmd',
-            'selftest.ps1', 'uninstall.cmd', 'README.txt', 'lib\WinUHid.dll', 'lib\WinUHidDevs.dll', 'include\WinUHid.h'
+            'selftest.ps1', 'uninstall.cmd', 'README.txt', 'lib\WinUHid.dll', 'lib\WinUHidDevs.dll', 'include\WinUHid.h',
+            'examples\go\winuhid-sample.exe', 'examples\go\main.go', 'examples\go\winuhid\winuhid.go'
 $missing = $required | Where-Object { -not (Test-Path (Join-Path $KitDir $_)) }
 if ($missing) { throw "Kit is incomplete, missing: $($missing -join ', ')" }
 

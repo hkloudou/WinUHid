@@ -120,6 +120,18 @@ $summary = "exit code $rc; pass=$(@($selftest -match '^\[PASS\]').Count), warn=$
 Add-Notice 'selftest.cmd' $summary
 if ($rc -ne 0) { $failed = $true }
 
+# --- 2b. Go sample: a real program calling WinUHid.dll and WinUHidDevs.dll -------------------
+# -strict: this is the console session, so input that cannot be seen arriving is a failure.
+# -click:  also checks that a left button press arrives as the left button.
+Add-Report "## Go sample (examples\go\winuhid-sample.exe -click -strict)"
+$rc = Invoke-WithTimeout -FilePath (Join-Path $KitDir 'examples\go\winuhid-sample.exe') -Arguments '-click', '-strict' -LogName '25-go-sample.txt' -TimeoutSeconds 120
+$goSample = @(Get-Content (Join-Path $LogDir '25-go-sample.txt') -ErrorAction SilentlyContinue)
+Add-Report '```'
+$goSample | ForEach-Object { Add-Report $_ }
+Add-Report '```'
+Add-Notice 'Go sample' "exit code $rc; pass=$(@($goSample -match '^\[PASS\]').Count), warn=$(@($goSample -match '^\[WARN\]').Count), fail=$(@($goSample -match '^\[FAIL\]').Count)"
+if ($rc -ne 0) { $failed = $true }
+
 # --- 3. Evidence for diagnosis --------------------------------------------------------------
 $setupLog = 'C:\Windows\INF\setupapi.dev.log'
 if (Test-Path $setupLog) {

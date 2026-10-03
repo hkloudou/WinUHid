@@ -2,3 +2,7 @@
 ci/kit/*.cmd text eol=crlf
 ci/kit/*.ps1 text eol=crlf
 ci/kit/*.txt text eol=crlf
+
+# Go sources stay LF everywhere, so gofmt agrees on every platform.
+*.go text eol=lf
+go.mod text eol=lf

@@ -41,6 +41,8 @@ selftest.cmd / .ps1        自检：创建虚拟鼠标和键盘并确认输入�
 uninstall.cmd              卸载并删除证书
 lib\                       WinUHid.dll、WinUHidDevs.dll 及对应的 .lib
 include\                   C/C++ 头文件
+examples\go\               Go 调用示例：源码和编译好的 winuhid-sample.exe，
+                           用法见该目录下的 README.md
 
 说明
 ----
