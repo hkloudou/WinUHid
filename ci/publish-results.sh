@@ -22,6 +22,24 @@ rm -rf "$work" && mkdir -p "$work"
 } > "$work/README.md"
 
 shopt -s nullglob
+
+# Summary first: per job, how many checks passed and failed, and every failed check by name.
+{
+  echo "## Summary"
+  echo
+  for dir in results/logs-*/; do
+    job="$(basename "$dir")"; job="${job#logs-}"
+    report="$dir/report.md"
+    if [ ! -f "$report" ]; then echo "- **$job**: no report"; continue; fi
+    passed="$(grep -c '\[PASS\]' "$report" || true)"
+    failed="$(grep -c '\[FAIL\]' "$report" || true)"
+    echo "- **$job**: $passed checks passed, $failed failed"
+    grep '\[FAIL\]' "$report" | sed 's/^[- ]*/    - /' | cut -c1-300 || true
+    grep -E '^- \*\*[^*]*(result|HTTP sample)\*\*' "$report" | sed 's/^- /    - /' || true
+  done
+  echo
+} >> "$work/README.md"
+
 for dir in results/logs-*/; do
   job="$(basename "$dir")"; job="${job#logs-}"
   {

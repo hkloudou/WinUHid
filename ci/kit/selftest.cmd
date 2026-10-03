@@ -3,6 +3,10 @@ rem WinUHid dev test build - creates a virtual mouse and keyboard and checks tha
 setlocal
 cd /d "%~dp0"
 
+rem selftest.cmd /y   does not wait for a key before closing (for scripts)
+set UNATTENDED=
+if /i "%~1"=="/y" set UNATTENDED=1
+
 fltmc >nul 2>&1
 if errorlevel 1 goto needadmin
 
@@ -19,5 +23,5 @@ goto end
 
 :end
 echo.
-if not defined CI pause
+if not defined UNATTENDED pause
 exit /b %RESULT%

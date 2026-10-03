@@ -1,10 +1,16 @@
 @echo off
 rem WinUHid dev test build - installer for TEST MACHINES ONLY.
 rem Trusts this build's throwaway test certificate, then installs the driver package.
+rem Usage: install.cmd       asks for a key press before installing and before closing
+rem        install.cmd /y    does not wait for anyone (for scripts)
 rem This file is UTF-8 without a byte order mark; the next line makes the console read it that way.
 chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
+
+rem install.cmd /y  = unattended: show the notice but do not wait for a key, neither before nor after.
+set UNATTENDED=
+if /i "%~1"=="/y" set UNATTENDED=1
 
 fltmc >nul 2>&1
 if errorlevel 1 goto needadmin
@@ -19,7 +25,7 @@ echo   test certificate, not a production signature.
 echo   Install it on test machines only. Do NOT distribute it to users.
 echo  ======================================================================
 echo.
-if defined CI goto confirmed
+if defined UNATTENDED goto confirmed
 echo  按任意键继续安装；不想安装请直接关闭本窗口。
 echo  Press any key to install, or close this window to cancel.
 pause >nul
@@ -75,5 +81,5 @@ goto end
 
 :end
 echo.
-if not defined CI pause
+if not defined UNATTENDED pause
 exit /b %RESULT%

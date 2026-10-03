@@ -45,11 +45,14 @@ examples\go\               Go 示例（调用两个 DLL）：源码和 winuhid-s
 examples\go-nodll\         Go 示例（不带任何 DLL，直接和驱动对话）：
                            源码和 winuhid-nodll-sample.exe
                            winuhid-http.exe 是用网址操作键盘鼠标的参考程序，
-                           说明在 httpserver\README.md
+                           只用于可行性验证和学习，没有鉴权，不允许分发给用户；
+                           边界和合规风险写在 httpserver\README.md 里
                            两个示例的用法见各自目录下的 README.md
 
 说明
 ----
+- 三个 .cmd 脚本后面加 /y（例如 install.cmd /y）就不等按键，给脚本自动调用时用。
+  install.cmd 的测试版提示仍然会显示。
 - 虚拟鼠标键盘相当于插在这台机器上的真实硬件，输入进入的是"本机屏幕"那个会话。
   如果你是用 Windows 远程桌面（mstsc）连到测试机上跑 selftest，设备能创建成功，
   但指针不会动、按键也看不到，selftest 会显示 [WARN] 并注明这是远程桌面下的正常现象。

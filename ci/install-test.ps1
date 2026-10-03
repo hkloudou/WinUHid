@@ -40,10 +40,12 @@ function Save-HangEvidence {
 function Invoke-WithTimeout {
     # Runs a program with its output going to a file, and gives up after the timeout.
     # Returns the exit code, or -1 when it had to be stopped.
-    param([string]$FilePath, [string[]]$Arguments, [string]$LogName, [int]$TimeoutSeconds = 240)
+    param([string]$FilePath, [string[]]$Arguments, [string]$LogName, [int]$TimeoutSeconds = 240, [string]$InputFile)
     $logPath = Join-Path $LogDir $LogName
-    $p = Start-Process -FilePath $FilePath -ArgumentList $Arguments -NoNewWindow -PassThru `
-        -RedirectStandardOutput $logPath -RedirectStandardError "$logPath.stderr"
+    $start = @{ FilePath = $FilePath; ArgumentList = $Arguments; NoNewWindow = $true; PassThru = $true
+                RedirectStandardOutput = $logPath; RedirectStandardError = "$logPath.stderr" }
+    if ($InputFile) { $start.RedirectStandardInput = $InputFile }
+    $p = Start-Process @start
     $null = $p.Handle   # keeps the exit code readable after the process ends
     if (-not $p.WaitForExit($TimeoutSeconds * 1000)) {
         $tag = [System.IO.Path]::GetFileNameWithoutExtension($LogName) + '-hang'
@@ -61,8 +63,16 @@ function Invoke-WithTimeout {
 
 function Invoke-KitScript {
     # Runs one of the kit's .cmd files, keeps its output as a log, returns its exit code.
-    param([string]$Name, [string]$LogName)
-    return Invoke-WithTimeout -FilePath 'cmd.exe' -Arguments '/c', "`"$(Join-Path $KitDir $Name)`"" -LogName $LogName
+    # By default with /y (unattended). With -PressKeys it runs the way a person starts it, and
+    # the key presses it waits for are supplied as input.
+    param([string]$Name, [string]$LogName, [switch]$PressKeys)
+    $script = Join-Path $KitDir $Name
+    if ($PressKeys) {
+        $keys = Join-Path $env:RUNNER_TEMP 'key-presses.txt'
+        Set-Content -Path $keys -Value '', '', '', '' -Encoding ascii
+        return Invoke-WithTimeout -FilePath 'cmd.exe' -Arguments '/c', "`"$script`"" -LogName $LogName -InputFile $keys
+    }
+    return Invoke-WithTimeout -FilePath 'cmd.exe' -Arguments '/c', "`"`"$script`" /y`"" -LogName $LogName
 }
 
 function Copy-MsiLog {
@@ -89,11 +99,26 @@ function Test-CertInStore {
     try { return [bool]($store.Certificates | Where-Object { $_.Thumbprint -eq $thumb }) } finally { $store.Close() }
 }
 
-# --- 1. install.cmd -------------------------------------------------------------------------
-Add-Report "## Install (install.cmd)"
+# --- 1a. install.cmd the way a person runs it: notice, key press, install; then remove again ----
+Add-Report "## Install with the confirmation prompt (install.cmd, key presses supplied)"
+$rc = Invoke-KitScript 'install.cmd' '08-install-with-prompt.txt' -PressKeys
+$shown = @(Get-Content (Join-Path $LogDir '08-install-with-prompt.txt') -ErrorAction SilentlyContinue)
+$asked = [bool]($shown -match 'Press any key to install')
+$warned = [bool]($shown -match 'Do NOT distribute it to users')
+Add-Notice 'install.cmd (prompted)' "exit code $rc; notice shown=$warned; asked for a key press=$asked; control device present=$([bool](Get-ControlDevice))"
+if ($rc -ne 0 -or -not $asked -or -not $warned -or -not (Get-ControlDevice)) { $failed = $true }
+$rc = Invoke-KitScript 'uninstall.cmd' '09-uninstall-after-prompted.txt'
+Add-Notice 'uninstall.cmd (between the two installs)' "exit code $rc; control device left=$([bool](Get-ControlDevice))"
+if ($rc -ne 0 -or (Get-ControlDevice)) { $failed = $true }
+
+# --- 1b. install.cmd /y: unattended ------------------------------------------------------------
+Add-Report "## Install unattended (install.cmd /y)"
 $rc = Invoke-KitScript 'install.cmd' '10-install-cmd.txt'
-Add-Notice 'install.cmd' "exit code $rc"
-if ($rc -ne 0) { $failed = $true }
+$shown = @(Get-Content (Join-Path $LogDir '10-install-cmd.txt') -ErrorAction SilentlyContinue)
+$asked = [bool]($shown -match 'Press any key to install')
+$warned = [bool]($shown -match 'Do NOT distribute it to users')
+Add-Notice 'install.cmd /y' "exit code $rc; notice shown=$warned; asked for a key press=$asked (must not)"
+if ($rc -ne 0 -or $asked -or -not $warned) { $failed = $true }
 Copy-MsiLog (Join-Path $KitDir 'install.log') '11-msi-install.log'
 
 $device = Get-ControlDevice
@@ -110,7 +135,7 @@ if ($device) {
 }
 
 # --- 2. selftest.cmd (Windows PowerShell 5.1, as on a tester's machine) ---------------------
-Add-Report "## Self test (selftest.cmd)"
+Add-Report "## Self test (selftest.cmd /y)"
 $rc = Invoke-KitScript 'selftest.cmd' '20-selftest.txt'
 Add-Report '```'
 Get-Content (Join-Path $LogDir '20-selftest.txt') -ErrorAction SilentlyContinue | ForEach-Object { Add-Report $_ }
@@ -160,7 +185,7 @@ if (Test-Path $setupLog) {
 & pnputil /enum-drivers 2>&1 | Out-File -FilePath (Join-Path $LogDir '30-pnputil-drivers.txt') -Encoding utf8
 
 # --- 4. uninstall.cmd -----------------------------------------------------------------------
-Add-Report "## Uninstall (uninstall.cmd)"
+Add-Report "## Uninstall (uninstall.cmd /y)"
 $rc = Invoke-KitScript 'uninstall.cmd' '40-uninstall-cmd.txt'
 Copy-MsiLog (Join-Path $KitDir 'uninstall.log') '41-msi-uninstall.log'
 $deviceLeft = [bool](Get-ControlDevice)

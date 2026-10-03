@@ -15,7 +15,7 @@
 | `vhid/mouse.go` | 相对鼠标（按移动量走，游戏用）：`NewMouse`、`Move`、`Button`、`Scroll`、`ScrollHorizontal` |
 | `vhid/absmouse.go` | 绝对定位鼠标（直接放到屏幕上某个位置，操作桌面用）：`NewAbsoluteMouse`、`MoveTo`、`MoveToPixel`、`Button`、`Scroll` |
 | `main.go` | 演示程序：创建鼠标和键盘，操作一下，并检查输入是否真的到达系统 |
-| `httpserver/` | 用网址操作键盘鼠标的参考程序 `winuhid-http.exe`，说明见该目录的 README.md |
+| `httpserver/` | 用网址操作键盘鼠标的参考程序 `winuhid-http.exe`。**只用于可行性验证和学习，不允许分发给用户**；边界和合规风险见该目录的 README.md |
 
 `vhid` 这个包可以整个拷进你的工程用。
 

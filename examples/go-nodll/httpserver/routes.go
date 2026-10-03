@@ -130,6 +130,7 @@ func badRequest(w http.ResponseWriter, message string) {
 func (s *server) help(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprint(w, `WinUHid HTTP sample: virtual keyboard and mouse over HTTP.
+FOR FEASIBILITY TESTS AND LEARNING ONLY. No authentication, no encryption: do not distribute or deploy it.
 
   /mouse/move/x/y        put the pointer on pixel (x, y) of the primary screen
   /mouse/click/x/y       go there and click the left button

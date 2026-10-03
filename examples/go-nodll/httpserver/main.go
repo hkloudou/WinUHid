@@ -10,8 +10,12 @@
 // its address tells that one to quit, waits for it to let go, and then takes over.
 //
 // It works when started from an elevated prompt in the user's session, and when started as
-// SYSTEM outside it (a service or a scheduled task). There is NO authentication here: anyone
-// who can reach the address can type and click on this machine. Add that before real use.
+// SYSTEM outside it (a service or a scheduled task).
+//
+// This program exists for feasibility tests and for learning. It must not be distributed to
+// users or deployed as it is: it has no authentication, no encryption, no consent of or notice
+// to the person at the machine, and no audit trail. Anyone who can reach the address can type
+// and click on this machine. See README.md for the boundaries and the compliance risks.
 package main
 
 import (
@@ -107,7 +111,8 @@ func run(address string) error {
 	}
 	serveError := make(chan error, 1)
 	go func() { serveError <- httpServer.Serve(listener) }()
-	log.Printf("listening on http://%s/  (no authentication: test use only)", listener.Addr())
+	log.Printf("listening on http://%s/", listener.Addr())
+	log.Printf("FOR FEASIBILITY TESTS AND LEARNING ONLY: no authentication, no encryption. Do not distribute or deploy it.")
 
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)

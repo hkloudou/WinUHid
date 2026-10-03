@@ -3,6 +3,10 @@ rem WinUHid dev test build - removes the driver package and this build's test ce
 setlocal
 cd /d "%~dp0"
 
+rem uninstall.cmd /y  does not wait for a key before closing (for scripts)
+set UNATTENDED=
+if /i "%~1"=="/y" set UNATTENDED=1
+
 fltmc >nul 2>&1
 if errorlevel 1 goto needadmin
 
@@ -49,5 +53,5 @@ goto end
 
 :end
 echo.
-if not defined CI pause
+if not defined UNATTENDED pause
 exit /b %RESULT%
