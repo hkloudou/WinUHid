@@ -24,6 +24,7 @@ const (
 	testVendorID          = 0x1234
 	testMouseProductID    = 0x5688
 	testKeyboardProductID = 0x5689
+	testAbsoluteProductID = 0x568A
 )
 
 // Windows virtual-key codes used to observe what arrived.
@@ -126,7 +127,131 @@ func run(r *report, typeText string, click bool) {
 	}
 
 	mouseDemo(r, click)
+	absoluteMouseDemo(r, click)
 	keyboardDemo(r, typeText)
+}
+
+// screenSize returns the size of the primary screen in pixels.
+func screenSize() (width, height int) {
+	w, _, _ := procGetSystemMetrics.Call(0) // SM_CXSCREEN
+	h, _, _ := procGetSystemMetrics.Call(1) // SM_CYSCREEN
+	return int(w), int(h)
+}
+
+// near reports whether two positions are at most tolerance pixels apart on each axis.
+func near(a, b point, tolerance int32) bool {
+	dx, dy := a.X-b.X, a.Y-b.Y
+	return dx >= -tolerance && dx <= tolerance && dy >= -tolerance && dy <= tolerance
+}
+
+// absoluteMouseDemo places the pointer at chosen pixels and reads back where it ended up.
+func absoluteMouseDemo(r *report, click bool) {
+	pointer, err := vhid.NewAbsoluteMouse(testVendorID, testAbsoluteProductID)
+	if err != nil {
+		r.fail("Virtual absolute mouse could not be created: %v", err)
+		return
+	}
+	defer pointer.Close()
+	r.pass("Virtual absolute mouse created.")
+
+	width, height := screenSize()
+	original, observable := cursorPosition()
+	if !observable || width <= 0 || height <= 0 {
+		if err := pointer.MoveTo(vhid.AbsoluteMax/2, vhid.AbsoluteMax/2); err != nil {
+			r.fail("Absolute position was rejected: %v", err)
+			return
+		}
+		r.unobserved("Absolute position accepted, but this session has no pointer to observe.")
+		return
+	}
+	r.info("Primary screen: %d x %d pixels. The pointer will visit a few places and return.", width, height)
+
+	targets := []point{
+		{int32(width / 4), int32(height / 4)},
+		{int32(3 * width / 4), int32(3 * height / 4)},
+		{int32(width / 2), int32(height / 2)},
+		{123, 234},
+	}
+	// The first target must differ from where the pointer already is, or reaching it proves nothing.
+	if near(original, targets[0], 2) {
+		targets[0], targets[1] = targets[1], targets[0]
+	}
+
+	place := func(target point) (point, error) {
+		if err := pointer.MoveToPixel(int(target.X), int(target.Y), width, height); err != nil {
+			return point{}, err
+		}
+		time.Sleep(200 * time.Millisecond)
+		actual, _ := cursorPosition()
+		return actual, nil
+	}
+
+	// Windows needs a moment to set up a new device: repeat the first placement until it shows.
+	var actual point
+	ready := false
+	for attempt := 0; attempt < 10 && !ready; attempt++ {
+		time.Sleep(500 * time.Millisecond)
+		if actual, err = place(targets[0]); err != nil {
+			r.fail("Absolute position was rejected: %v", err)
+			return
+		}
+		ready = near(actual, targets[0], 2)
+	}
+	if !ready && actual == original {
+		r.unobserved("Absolute positions accepted, but the pointer did not move.")
+		return
+	}
+
+	exact := true
+	summary := ""
+	for i, target := range targets {
+		if i > 0 { // the first one was placed above
+			if actual, err = place(target); err != nil {
+				r.fail("Absolute position was rejected: %v", err)
+				return
+			}
+		}
+		if !near(actual, target, 1) {
+			exact = false
+		}
+		summary += fmt.Sprintf(" (%d,%d)->(%d,%d)", target.X, target.Y, actual.X, actual.Y)
+	}
+	if exact {
+		r.pass("Pointer placed where asked, wanted->got:%s.", summary)
+	} else {
+		r.fail("Pointer did not land where asked, wanted->got:%s.", summary)
+	}
+
+	if click {
+		centre := targets[2]
+		if actual, err = place(centre); err != nil {
+			r.fail("Absolute position was rejected: %v", err)
+			return
+		}
+		if err := pointer.Button(vhid.ButtonLeft, true); err != nil {
+			r.fail("Button on the absolute mouse was rejected: %v", err)
+			return
+		}
+		time.Sleep(200 * time.Millisecond)
+		leftDown, rightDown := keyIsDown(vkLeftButton), keyIsDown(vkRightButton)
+		held, _ := cursorPosition()
+		if err := pointer.Button(vhid.ButtonLeft, false); err != nil {
+			r.fail("Button on the absolute mouse was rejected: %v", err)
+			return
+		}
+		time.Sleep(200 * time.Millisecond)
+		leftReleased := !keyIsDown(vkLeftButton)
+		switch {
+		case leftDown && !rightDown && leftReleased && near(held, centre, 1):
+			r.pass("Left click at (%d,%d) really arrived, with the pointer still there.", centre.X, centre.Y)
+		case leftDown && !rightDown && leftReleased:
+			r.fail("Left click arrived, but the pointer was at (%d,%d) instead of (%d,%d).", held.X, held.Y, centre.X, centre.Y)
+		default:
+			r.unobserved("Click on the absolute mouse accepted, but Windows did not show it (down seen=%v, up seen=%v).", leftDown, leftReleased)
+		}
+	}
+
+	_, _ = place(original) // put the pointer back
 }
 
 func mouseDemo(r *report, click bool) {

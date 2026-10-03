@@ -12,7 +12,8 @@
 | --- | --- |
 | `vhid/device.go` | 和驱动对话：打开 `\\.\WinUHid`，发设备信息、说明书、创建、启动，之后每份输入是一次写入 |
 | `vhid/keyboard.go` | 键盘：`NewKeyboard`、`KeyDown`、`KeyUp`、`ReleaseAll` |
-| `vhid/mouse.go` | 鼠标：`NewMouse`、`Move`、`Button`、`Scroll`、`ScrollHorizontal` |
+| `vhid/mouse.go` | 相对鼠标（按移动量走，游戏用）：`NewMouse`、`Move`、`Button`、`Scroll`、`ScrollHorizontal` |
+| `vhid/absmouse.go` | 绝对定位鼠标（直接放到屏幕上某个位置，操作桌面用）：`NewAbsoluteMouse`、`MoveTo`、`MoveToPixel`、`Button`、`Scroll` |
 | `main.go` | 演示程序：创建鼠标和键盘，操作一下，并检查输入是否真的到达系统 |
 
 `vhid` 这个包可以整个拷进你的工程用。
@@ -36,6 +37,21 @@ defer keyboard.Close()
 
 keyboard.KeyDown(vhid.KeyA)
 keyboard.KeyUp(vhid.KeyA)
+```
+
+把指针放到指定位置再点击，用绝对定位鼠标：
+
+```go
+pointer, err := vhid.NewAbsoluteMouse(0x1234, 0x568A)
+if err != nil { ... }
+defer pointer.Close()
+
+time.Sleep(2 * time.Second)
+pointer.MoveToPixel(800, 450, 1920, 1080) // 屏幕是 1920x1080，放到像素 (800, 450)
+pointer.Button(vhid.ButtonLeft, true)     // 在这个位置按下左键
+pointer.Button(vhid.ButtonLeft, false)
+
+pointer.MoveTo(vhid.AbsoluteMax/2, vhid.AbsoluteMax/2) // 不知道分辨率时：0..32767 表示从左上到右下
 ```
 
 ## 运行演示程序
@@ -62,7 +78,7 @@ GOOS=windows GOARCH=amd64 go build -o winuhid-nodll-sample.exe .    在 Mac 或 
 | | `examples/go` | `examples/go-nodll` |
 | --- | --- | --- |
 | 要随程序带的文件 | `WinUHid.dll`、`WinUHidDevs.dll` | 无 |
-| 鼠标 | 用 `WinUHidDevs.dll` 里现成的 | 自己定义的五键鼠标，带滚轮和横向滚动 |
+| 鼠标 | 用 `WinUHidDevs.dll` 里现成的相对鼠标 | 自己定义的五键鼠标，带滚轮和横向滚动；相对和绝对定位两种 |
 | 滚轮单位 | 1/120 格 | 整格 |
 | 手柄（PS4、PS5、Xbox） | `WinUHidDevs.dll` 里有，示例没用到 | 没有 |
 | 驱动接口变了怎么办 | 换新的 DLL | 要跟着改 `vhid/device.go` |
@@ -75,5 +91,7 @@ GOOS=windows GOARCH=amd64 go build -o winuhid-nodll-sample.exe .    在 Mac 或 
 - **`-type` 按的是键位，不是字符。** 打出什么取决于目标窗口当前的键盘布局和输入法；开着中文输入法时字母会进输入法。
 - **远程桌面会话里看不到效果。** 虚拟设备的输入进的是本机屏幕那个会话。
 - **设备随进程存在。** 调 `Close` 或进程退出，设备就从系统里消失。
-- **鼠标是相对移动的。** 移动多少像素还受系统的指针速度和加速设置影响，不能直接定位到屏幕上某个坐标。
+- **两种鼠标各有用途。** 相对鼠标 `Mouse` 移动多少像素受系统的指针速度和加速设置影响，不能精确定位，但只认相对移动的程序（很多游戏）需要它。绝对定位鼠标 `AbsoluteMouse` 直接把指针放到指定位置，不受这些设置影响。
+- **绝对定位鼠标的按键和滚轮作用在上一次 `MoveTo` 的位置。** 它的每份数据都带着位置，所以要先 `MoveTo` 再按键；用户自己动过鼠标之后再按键，指针会回到上一次 `MoveTo` 的位置。
+- **绝对定位的范围是主屏幕。** 多显示器时它对应哪块屏幕还没有测过。
 - `vhid/device.go` 里的控制码和结构来自 `WinUHid Driver/Public.h`，驱动接口改了要同步改。

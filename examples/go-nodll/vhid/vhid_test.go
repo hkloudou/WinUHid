@@ -43,7 +43,7 @@ func TestControlCodes(t *testing.T) {
 }
 
 func TestDescriptorsAreWellFormed(t *testing.T) {
-	for name, descriptor := range map[string][]byte{"keyboard": keyboardReportDescriptor, "mouse": mouseReportDescriptor} {
+	for name, descriptor := range map[string][]byte{"keyboard": keyboardReportDescriptor, "mouse": mouseReportDescriptor, "absolute mouse": absoluteMouseReportDescriptor} {
 		depth := 0
 		for i := 0; i < len(descriptor); {
 			prefix := descriptor[i]
@@ -65,5 +65,30 @@ func TestDescriptorsAreWellFormed(t *testing.T) {
 		if depth != 0 {
 			t.Errorf("%s descriptor: collections are not balanced (depth %d)", name, depth)
 		}
+	}
+}
+
+func TestAbsoluteFromPixel(t *testing.T) {
+	// Windows turns the device's 0..32767 into 0..65535 and then into a pixel; aiming at the
+	// middle of a pixel must come back as that pixel for every pixel of common screen sizes.
+	for _, size := range []int{640, 1024, 1366, 1920, 2560, 3840, 7680} {
+		previous := -1
+		for pixel := 0; pixel < size; pixel++ {
+			value := int(AbsoluteFromPixel(pixel, size))
+			if value < 0 || value > AbsoluteMax {
+				t.Fatalf("size %d pixel %d: value %d out of range", size, pixel, value)
+			}
+			if value <= previous {
+				t.Fatalf("size %d pixel %d: value %d does not increase", size, pixel, value)
+			}
+			previous = value
+			normalised := value * 65535 / AbsoluteMax
+			if got := normalised * size / 65536; got != pixel {
+				t.Fatalf("size %d pixel %d: maps back to pixel %d", size, pixel, got)
+			}
+		}
+	}
+	if AbsoluteFromPixel(-5, 1920) != AbsoluteFromPixel(0, 1920) || AbsoluteFromPixel(5000, 1920) != AbsoluteFromPixel(1919, 1920) {
+		t.Error("positions outside the screen are not clamped to its edge")
 	}
 }
