@@ -1,8 +1,13 @@
-name: Dev MSI (test-signed, not for distribution)
+name: Dev build (test-signed, not for distribution)
 
-# Builds the driver, signs it with a throwaway certificate created inside the run,
-# packages the MSI, and installs it on the runner as a smoke test.
-# The MSI produced here is for test machines only.
+# build         compiles the driver and libraries, signs the driver package with a throwaway
+#               certificate created inside the run, and packages the MSI plus tester scripts.
+# install-test  takes that package to clean machines and runs install -> self test -> uninstall.
+#               Server 2022 exercises the INF's Windows 10 rules, Server 2025 the Windows 11 rules.
+# report        writes the reports and log tails of all jobs to the `ci-results` branch.
+# release       when everything passed, refreshes the `dev-test` pre-release with the package.
+#
+# The package produced here is for test machines only.
 
 on:
   push:
@@ -13,31 +18,21 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: dev-msi-${{ github.ref }}
+  group: dev-build-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
-  contents: write   # only to publish the ci-results/* branches
+  contents: read
+
+env:
+  CONFIGURATION: Release
+  PLATFORM: x64
 
 jobs:
   build:
-    name: ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
-    timeout-minutes: 60
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-2022
-            experimental: false
-          - os: windows-latest
-            experimental: true
-
-    env:
-      CONFIGURATION: Release
-      PLATFORM: x64
+    name: Build and sign
+    runs-on: windows-2022     # ships Visual Studio 2022 with the WDK; newer images do not
+    timeout-minutes: 45
 
     steps:
     - name: Checkout repository
@@ -83,35 +78,152 @@ jobs:
       shell: pwsh
       run: ./ci/build-msi.ps1
 
-    - name: Smoke test (install, create devices, uninstall)
+    - name: Assemble tester kit
       shell: pwsh
-      run: ./ci/smoke-test.ps1
+      run: ./ci/assemble-kit.ps1
 
-    - name: Collect files for download
+    - name: Job summary
       if: always()
       shell: pwsh
-      run: |
-        $out = "out"
-        New-Item -ItemType Directory -Force -Path "$out/lib", "$out/include" | Out-Null
-        $bin = "build/$env:CONFIGURATION/$env:PLATFORM"
-        Copy-Item "$bin/WinUHid.dll", "$bin/WinUHid.lib", "$bin/WinUHidDevs.dll", "$bin/WinUHidDevs.lib" "$out/lib" -ErrorAction SilentlyContinue
-        Copy-Item "WinUHid/WinUHid.h", "WinUHidDevs/*.h" "$out/include" -ErrorAction SilentlyContinue
-        if (Test-Path "$bin/WinUHid Driver") { Copy-Item "$bin/WinUHid Driver" "$out/driver-package" -Recurse -Force }
-        if (Test-Path "out/report.md") { Get-Content "out/report.md" | Add-Content $env:GITHUB_STEP_SUMMARY }
+      run: if (Test-Path out/report.md) { Get-Content out/report.md | Add-Content $env:GITHUB_STEP_SUMMARY }
 
-    - name: Upload artifacts
+    - name: Upload tester kit
+      uses: actions/upload-artifact@v4
+      with:
+        name: WinUHid-dev-test
+        path: out/kit/
+        if-no-files-found: error
+
+    - name: Upload logs
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: WinUHid-dev-test-${{ matrix.os }}
-        path: out/
+        name: logs-build
+        path: |
+          out/report.md
+          out/logs/
         if-no-files-found: warn
 
-    - name: Publish results branch
+  install-test:
+    name: Install test on ${{ matrix.os }}
+    needs: build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, windows-2025]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download tester kit
+      uses: actions/download-artifact@v4
+      with:
+        name: WinUHid-dev-test
+        path: out/kit
+
+    - name: Install, self test, uninstall
+      shell: pwsh
+      run: ./ci/install-test.ps1
+
+    - name: Job summary
       if: always()
       shell: pwsh
+      run: if (Test-Path out/report.md) { Get-Content out/report.md | Add-Content $env:GITHUB_STEP_SUMMARY }
+
+    - name: Upload logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: logs-install-${{ matrix.os }}
+        path: |
+          out/report.md
+          out/logs/
+        if-no-files-found: warn
+
+  report:
+    name: Publish results branch
+    needs: [build, install-test]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download logs of all jobs
+      uses: actions/download-artifact@v4
+      with:
+        pattern: logs-*
+        path: results
+
+    - name: Publish to the ci-results branch
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RESULT_LABEL: ${{ matrix.os }}
-        JOB_STATUS: ${{ job.status }}
-      run: ./ci/publish-results.ps1
+        GITHUB_TOKEN: ${{ github.token }}
+        RESULT_BUILD: ${{ needs.build.result }}
+        RESULT_INSTALL: ${{ needs.install-test.result }}
+      run: ./ci/publish-results.sh
+
+    # Temporary: removes the branches and runs left over from setting this pipeline up.
+    - name: One-off cleanup
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        for branch in ci/dev-msi ci-results/windows-2022 ci-results/windows-latest; do
+          gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$branch" --silent \
+            && echo "deleted branch $branch" || echo "branch $branch was not deleted"
+        done
+        gh run list --repo "$GITHUB_REPOSITORY" --limit 100 --json databaseId,status \
+          --jq '.[] | select(.status == "completed") | .databaseId' | while read -r id; do
+          if [ "$id" != "$GITHUB_RUN_ID" ]; then
+            gh run delete "$id" --repo "$GITHUB_REPOSITORY" && echo "deleted run $id" || true
+          fi
+        done
+
+  release:
+    name: Refresh the dev-test pre-release
+    needs: [build, install-test]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download tester kit
+      uses: actions/download-artifact@v4
+      with:
+        name: WinUHid-dev-test
+        path: WinUHid-dev-test-kit
+
+    - name: Publish
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        (cd WinUHid-dev-test-kit && zip -q -r ../WinUHid-dev-test-kit.zip .)
+        {
+          cat ci/release-notes.md
+          echo
+          echo "- 提交：$GITHUB_SHA"
+          echo "- 构建记录：$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          echo "- 测试证书指纹：$(tr -d '\r\n' < WinUHid-dev-test-kit/cert-thumbprint.txt)"
+          echo "- 已通过安装测试的系统：Windows Server 2022（Win10 规则）、Windows Server 2025（Win11 规则）"
+        } > notes.md
+        gh release delete dev-test --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+        sleep 5
+        gh release create dev-test WinUHid-dev-test-kit.zip \
+          --repo "$GITHUB_REPOSITORY" \
+          --target "$GITHUB_SHA" \
+          --prerelease \
+          --title "开发测试包（仅限测试机）" \
+          --notes-file notes.md

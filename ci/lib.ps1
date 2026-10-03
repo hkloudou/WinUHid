@@ -3,9 +3,10 @@
 $script:RepoRoot   = Split-Path -Parent $PSScriptRoot
 $script:OutDir     = Join-Path $RepoRoot 'out'
 $script:LogDir     = Join-Path $OutDir 'logs'
+$script:KitDir     = Join-Path $OutDir 'kit'      # what a tester downloads: MSI, certificate, libraries, scripts
 $script:ReportFile = Join-Path $OutDir 'report.md'
 
-New-Item -ItemType Directory -Force -Path $OutDir, $LogDir | Out-Null
+New-Item -ItemType Directory -Force -Path $OutDir, $LogDir, $KitDir | Out-Null
 
 function Add-Report {
     param([string]$Text)
@@ -60,4 +61,21 @@ function Add-CertToMachineStore {
     $store = [System.Security.Cryptography.X509Certificates.X509Store]::new($StoreName, 'LocalMachine')
     $store.Open('ReadWrite')
     try { $store.Add($cert) } finally { $store.Close() }
+}
+
+# Records the facts about this machine that matter for driver installation.
+function Add-MachineReport {
+    $os = Get-CimInstance Win32_OperatingSystem
+    Add-Report "## Machine"
+    Add-Report "- Runner image: ImageOS=$env:ImageOS, ImageVersion=$env:ImageVersion"
+    Add-Report "- OS: $($os.Caption), build $($os.BuildNumber)"
+    # A machine in test-signing mode cannot prove that the package installs on a normal machine.
+    $bcd = (& bcdedit /enum '{current}' 2>&1 | Out-String)
+    $testSigning = if ($bcd -match '(?im)^\s*testsigning\s+(\S+)') { $Matches[1] } else { 'not set (off)' }
+    Add-Notice 'Test-signing boot option' $testSigning
+    try {
+        Add-Report "- Secure Boot: $(Confirm-SecureBootUEFI)"
+    } catch {
+        Add-Report "- Secure Boot: unknown ($($_.Exception.Message))"
+    }
 }

@@ -74,7 +74,7 @@
 
 			<!-- Place our signing certificate in the TrustedPublishers store to avoid triggering a user prompt in quiet mode -->
 			<Component Id="WinUHidCertificate" Guid="{09B24DE9-515E-45B1-B350-CD6E20022457}">
-				<iis:Certificate BinaryRef="WinUHidCert" Name="Cameron Gutman" StoreLocation="localMachine" StoreName="trustedPublisher" />
+				<iis:Certificate BinaryRef="WinUHidCert" Name="WinUHid driver signing certificate" StoreLocation="localMachine" StoreName="trustedPublisher" />
 			</Component>
 		</ComponentGroup>
 

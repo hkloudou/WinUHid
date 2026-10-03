@@ -2,20 +2,7 @@
 . "$PSScriptRoot/lib.ps1"
 $ErrorActionPreference = 'Continue'
 
-$os = Get-CimInstance Win32_OperatingSystem
-Add-Report "## Machine"
-Add-Report "- Runner image: ImageOS=$env:ImageOS, ImageVersion=$env:ImageVersion"
-Add-Report "- OS: $($os.Caption), build $($os.BuildNumber)"
-
-# Evidence for the "no test mode needed" question: is this machine in test-signing mode?
-$bcd = (& bcdedit /enum '{current}' 2>&1 | Out-String)
-$testSigning = if ($bcd -match '(?im)^\s*testsigning\s+(\S+)') { $Matches[1] } else { 'not set (off)' }
-Add-Notice 'Test-signing boot option' $testSigning
-try {
-    Add-Report "- Secure Boot: $(Confirm-SecureBootUEFI)"
-} catch {
-    Add-Report "- Secure Boot: unknown ($($_.Exception.Message))"
-}
+Add-MachineReport
 
 Add-Report "## Toolchain"
 $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -23,7 +10,7 @@ if (Test-Path $vswhere) {
     $instances = & $vswhere -all -products * -format json | ConvertFrom-Json
     foreach ($i in $instances) {
         Add-Report "- Visual Studio: $($i.displayName) $($i.installationVersion) at $($i.installationPath)"
-        $toolsets = Get-ChildItem -Path "$($i.installationPath)\MSBuild\Microsoft\VC\*\Platforms\x64\PlatformToolsets" -Directory -ErrorAction SilentlyContinue |
+        $toolsets = Get-ChildItem -Path "$($i.installationPath)\MSBuild\Microsoft\VC\*\Platforms\x64\PlatformToolsets\*" -Directory -ErrorAction SilentlyContinue |
             ForEach-Object { $_.Name } | Sort-Object -Unique
         Add-Report "  - x64 platform toolsets: $($toolsets -join ', ')"
     }

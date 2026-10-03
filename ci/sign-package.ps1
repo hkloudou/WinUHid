@@ -63,7 +63,7 @@ function New-PackageCatalog {
 
 # The test certificate must be a trusted root on this machine for verification to succeed.
 # A tester has to do the same on the test machine before installing the MSI.
-Add-CertToMachineStore -CerPath (Join-Path $OutDir 'WinUHid-dev-test.cer') -StoreName 'Root'
+Add-CertToMachineStore -CerPath (Join-Path $KitDir 'WinUHid-dev-test.cer') -StoreName 'Root'
 
 # 1. Binaries first: an embedded signature does not change the hash a catalog records for a PE file.
 foreach ($dll in Get-ChildItem -Path $pkgDir -Recurse -Filter *.dll) {

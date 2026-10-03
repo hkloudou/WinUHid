@@ -1,54 +1,44 @@
 # 开发验证流水线
 
-每次推送到 `main`，GitHub Actions 会自动：
+每次推送到 `main`，GitHub Actions 自动跑 `.github/workflows/dev-msi.yml`：
 
-1. 编译用户态驱动 `WinUHidDriver.dll` 和两个调用库 `WinUHid.dll`、`WinUHidDevs.dll`
-2. 在本次构建里临时生成一张测试证书，给驱动包签名
-3. 打包成 MSI
-4. 在构建机上直接安装这个 MSI，创建一个虚拟鼠标和一个虚拟键盘，再卸载
+| 阶段 | 在哪台机器 | 做什么 |
+| --- | --- | --- |
+| build | Server 2022 | 编译驱动和调用库；临时生成一张测试证书给驱动包签名；打包 MSI；组装测试包 |
+| install-test | Server 2022、Server 2025 各一台干净机器 | 按测试人员的步骤走一遍：`install.cmd` → `selftest.cmd` → `uninstall.cmd` |
+| report | — | 把各阶段的报告和日志摘要写到 `ci-results` 分支 |
+| release | — | 全部通过后，更新 Releases 里的 `dev-test` 预发布 |
 
-构建结果在仓库 Actions 页面里对应那次运行的 Artifacts 下载，同时摘要会推到 `ci-results/<系统镜像>` 分支。
+同一个 MSI 里有两套安装规则：Server 2022 走 Windows 10 那套，Server 2025 走 Windows 11 那套，所以两台都要测。
 
-## 这个 MSI 只能用于测试机
+## 去哪看结果
+
+- 测试包下载：仓库 Releases 页的 `dev-test`（只在全部通过时更新）
+- 最近一次构建的报告和日志：`ci-results` 分支的 `README.md` 和 `logs/`
+- 完整日志：Actions 页面对应的那次运行
+
+## 测试包只能用于测试机
 
 - 证书是每次构建临时生成的自签名证书，私钥不可导出，构建机销毁后就不存在了
 - 它不是正式签名，**不要发给用户，不要装在生产机器上**
 - 正式发布要换成公司主体的代码签名
+- GitHub 的构建机本身开着测试模式，所以"普通机器不开测试模式也能安装"需要在真实的 Windows 机器上确认
 
-## 在测试机上安装
+测试包的使用方法见 `kit/README.txt`。
 
-需要：64 位 Windows 10 2004 及以上或 Windows 11，管理员权限。不需要开启测试模式，不需要关闭安全启动。
+## 文件说明
 
-用管理员身份打开 PowerShell，进入解压后的目录：
-
-```powershell
-# 1. 信任这次构建的测试证书（每次构建的证书都不同，换了新的 MSI 就要重新导入）
-certutil -addstore -f Root WinUHid-dev-test.cer
-
-# 2. 安装
-msiexec /i WinUHid-dev-test-x64.msi /l*v install.log
-
-# 3. 检查控制设备是否出现
-pnputil /enum-devices /class System | findstr /i WinUHid
-```
-
-## 测试完清理
-
-```powershell
-msiexec /x WinUHid-dev-test-x64.msi
-certutil -delstore Root "WinUHid Dev Test"
-certutil -delstore TrustedPublisher "WinUHid Dev Test"
-```
-
-## 脚本说明
-
-| 脚本 | 作用 |
+| 文件 | 作用 |
 | --- | --- |
+| `lib.ps1` | 各脚本共用的函数 |
 | `toolchain-report.ps1` | 记录构建机上的编译器、WDK、签名工具版本 |
 | `ensure-wdk.ps1` | 构建机缺驱动开发套件时自动安装 |
 | `new-test-cert.ps1` | 生成本次构建专用的测试证书 |
 | `msbuild-project.ps1` | 编译单个项目并保存日志 |
 | `sign-package.ps1` | 给驱动 DLL 和目录文件签名并校验 |
 | `build-msi.ps1` | 打包 MSI，并拆开确认里面是签过名的文件 |
-| `smoke-test.ps1` | 在构建机上安装、创建虚拟鼠标和键盘、卸载 |
-| `publish-results.ps1` | 把报告和日志摘要推到 `ci-results/*` 分支 |
+| `assemble-kit.ps1` | 组装测试包（MSI、证书、脚本、调用库、头文件） |
+| `install-test.ps1` | 在干净机器上执行测试包里的安装、自检、卸载，并检查结果 |
+| `publish-results.sh` | 把报告和日志摘要推到 `ci-results` 分支 |
+| `release-notes.md` | `dev-test` 预发布页面上的说明文字 |
+| `kit/` | 原样放进测试包的文件：安装、自检、卸载脚本和说明 |

@@ -1,0 +1,4 @@
+# The tester kit is copied as-is into the download; Windows batch files need CRLF line endings.
+ci/kit/*.cmd text eol=crlf
+ci/kit/*.ps1 text eol=crlf
+ci/kit/*.txt text eol=crlf

@@ -25,7 +25,7 @@ if (-not $msi) {
     Write-Host '::error::The build finished but no MSI was produced.'
     exit 1
 }
-$finalMsi = Join-Path $OutDir 'WinUHid-dev-test-x64.msi'
+$finalMsi = Join-Path $KitDir 'WinUHid-dev-test-x64.msi'
 Copy-Item -Path $msi.FullName -Destination $finalMsi -Force
 Add-Report "## Installer"
 Add-Report "- Built: $($msi.FullName) ($($msi.Length) bytes)"

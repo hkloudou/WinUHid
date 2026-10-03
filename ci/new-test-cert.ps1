@@ -17,9 +17,11 @@ $cert  = Get-Item "Cert:\CurrentUser\My\$thumbprint"
 $bytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
 
 $embedded = Join-Path $RepoRoot 'Installer\WinUHid Package\WinUHidCertificate.cer'
-$public   = Join-Path $OutDir 'WinUHid-dev-test.cer'
+$public   = Join-Path $KitDir 'WinUHid-dev-test.cer'
 [System.IO.File]::WriteAllBytes($embedded, $bytes)
 [System.IO.File]::WriteAllBytes($public, $bytes)
+# The tester's uninstall script uses this to remove exactly this certificate again.
+Set-Content -Path (Join-Path $KitDir 'cert-thumbprint.txt') -Value $thumbprint -Encoding ascii
 
 if ($env:GITHUB_ENV) {
     Add-Content -Path $env:GITHUB_ENV -Value "TEST_CERT_THUMBPRINT=$thumbprint"
