@@ -60,6 +60,7 @@ public static class Probe
     [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr window);
     [DllImport("user32.dll")] static extern bool SetWindowPos(IntPtr window, IntPtr after, int x, int y, int cx, int cy, uint flags);
+    [DllImport("user32.dll")] static extern bool ShowWindow(IntPtr window, int command);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetWindowTextW(IntPtr window, System.Text.StringBuilder text, int max);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassNameW(IntPtr window, System.Text.StringBuilder text, int max);
     [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr window, out uint pid);
@@ -80,6 +81,10 @@ public static class Probe
     public static string Foreground() { return Describe(GetForegroundWindow()); }
     public static void BringToFront(IntPtr window)
     {
+        // A process that was started hidden (as build steps are) gets its first window hidden
+        // too, whatever the program asked for. Asking again is honoured.
+        ShowWindow(window, 5); // SW_SHOW
+        ShowWindow(window, 9); // SW_RESTORE
         SetWindowPos(window, new IntPtr(-1), 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0040); // topmost; keep size and place; show
         SetForegroundWindow(window);
     }
@@ -184,7 +189,10 @@ function Show-TestWindow {
     # Puts the test window in front and says what a click at the test points would hit.
     [Probe]::BringToFront([IntPtr]$ui.Handle)
     Start-Sleep -Milliseconds 300
-    Add-Report "- window $($ui.Bounds); at the click point: $([Probe]::WindowAt($ui.PadX, $ui.PadY)); at the text box: $([Probe]::WindowAt($ui.BoxX, $ui.BoxY)); in front: $([Probe]::Foreground())"
+    $atPad = [Probe]::WindowAt($ui.PadX, $ui.PadY)
+    $atBox = [Probe]::WindowAt($ui.BoxX, $ui.BoxY)
+    Check 'test window is visible at the test points' ($atPad -match 'WinUHid HTTP test window' -and $atBox -match 'WinUHid HTTP test window') `
+        "at the click point: $atPad; at the text box: $atBox"
 }
 Show-TestWindow
 Save-Desktop '64-http-desktop-before.png'
