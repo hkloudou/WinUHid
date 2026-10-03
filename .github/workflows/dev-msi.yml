@@ -1,0 +1,117 @@
+name: Dev MSI (test-signed, not for distribution)
+
+# Builds the driver, signs it with a throwaway certificate created inside the run,
+# packages the MSI, and installs it on the runner as a smoke test.
+# The MSI produced here is for test machines only.
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+concurrency:
+  group: dev-msi-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write   # only to publish the ci-results/* branches
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            experimental: false
+          - os: windows-latest
+            experimental: true
+
+    env:
+      CONFIGURATION: Release
+      PLATFORM: x64
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
+
+    - name: Toolchain report
+      shell: pwsh
+      run: ./ci/toolchain-report.ps1
+
+    - name: Ensure WDK
+      shell: pwsh
+      run: ./ci/ensure-wdk.ps1
+
+    - name: Create throwaway test certificate
+      shell: pwsh
+      run: ./ci/new-test-cert.ps1
+
+    - name: Restore NuGet packages
+      run: msbuild WinUHid.sln -t:restore -p:RestorePackagesConfig=true -v:minimal
+
+    - name: Build driver
+      shell: pwsh
+      run: ./ci/msbuild-project.ps1 -Project 'WinUHid Driver\WinUHid Driver.vcxproj' -LogName '01-driver' -Extra '/p:SignMode=Off'
+
+    - name: Sign driver package
+      shell: pwsh
+      run: ./ci/sign-package.ps1
+
+    - name: Build libraries
+      shell: pwsh
+      run: ./ci/msbuild-project.ps1 -Project 'WinUHidDevs\WinUHidDevs.vcxproj' -LogName '02-libraries'
+
+    - name: Build installer helper
+      shell: pwsh
+      run: ./ci/msbuild-project.ps1 -Project 'Installer\RootDevCA\RootDevCA.vcxproj' -LogName '03-rootdevca'
+
+    - name: Build and check MSI
+      shell: pwsh
+      run: ./ci/build-msi.ps1
+
+    - name: Smoke test (install, create devices, uninstall)
+      shell: pwsh
+      run: ./ci/smoke-test.ps1
+
+    - name: Collect files for download
+      if: always()
+      shell: pwsh
+      run: |
+        $out = "out"
+        New-Item -ItemType Directory -Force -Path "$out/lib", "$out/include" | Out-Null
+        $bin = "build/$env:CONFIGURATION/$env:PLATFORM"
+        Copy-Item "$bin/WinUHid.dll", "$bin/WinUHid.lib", "$bin/WinUHidDevs.dll", "$bin/WinUHidDevs.lib" "$out/lib" -ErrorAction SilentlyContinue
+        Copy-Item "WinUHid/WinUHid.h", "WinUHidDevs/*.h" "$out/include" -ErrorAction SilentlyContinue
+        if (Test-Path "$bin/WinUHid Driver") { Copy-Item "$bin/WinUHid Driver" "$out/driver-package" -Recurse -Force }
+        if (Test-Path "out/report.md") { Get-Content "out/report.md" | Add-Content $env:GITHUB_STEP_SUMMARY }
+
+    - name: Upload artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: WinUHid-dev-test-${{ matrix.os }}
+        path: out/
+        if-no-files-found: warn
+
+    - name: Publish results branch
+      if: always()
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RESULT_LABEL: ${{ matrix.os }}
+        JOB_STATUS: ${{ job.status }}
+      run: ./ci/publish-results.ps1

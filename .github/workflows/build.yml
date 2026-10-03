@@ -1,16 +1,9 @@
 name: Build WinUHid
 
+# Upstream's full-matrix build. In this fork it only runs when started by hand:
+# the default runner image no longer ships the WDK, so it fails on every push.
+# The day-to-day pipeline is dev-msi.yml.
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - synchronize
-      - reopened
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:

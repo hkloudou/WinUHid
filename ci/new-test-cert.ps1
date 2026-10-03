@@ -1,0 +1,30 @@
+# Creates a throwaway self-signed code signing certificate for this build only.
+# The private key stays in the runner's certificate store and disappears with the runner.
+# The public certificate replaces the upstream author's certificate that the installer embeds.
+. "$PSScriptRoot/lib.ps1"
+$ErrorActionPreference = 'Stop'
+
+$runId   = if ($env:GITHUB_RUN_ID) { $env:GITHUB_RUN_ID } else { 'local' }
+$subject = "CN=WinUHid Dev Test $runId, O=Test signing only - not for production"
+
+$created = New-SelfSignedCertificate -Type CodeSigningCert -Subject $subject `
+    -CertStoreLocation 'Cert:\CurrentUser\My' -KeyAlgorithm RSA -KeyLength 3072 `
+    -HashAlgorithm SHA256 -KeyExportPolicy NonExportable -NotAfter (Get-Date).AddDays(365)
+$thumbprint = $created.Thumbprint
+
+# Re-read through the provider so the rest does not depend on how the PKI module returned the object.
+$cert  = Get-Item "Cert:\CurrentUser\My\$thumbprint"
+$bytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+
+$embedded = Join-Path $RepoRoot 'Installer\WinUHid Package\WinUHidCertificate.cer'
+$public   = Join-Path $OutDir 'WinUHid-dev-test.cer'
+[System.IO.File]::WriteAllBytes($embedded, $bytes)
+[System.IO.File]::WriteAllBytes($public, $bytes)
+
+if ($env:GITHUB_ENV) {
+    Add-Content -Path $env:GITHUB_ENV -Value "TEST_CERT_THUMBPRINT=$thumbprint"
+}
+$env:TEST_CERT_THUMBPRINT = $thumbprint
+
+Add-Report "## Signing certificate"
+Add-Notice 'Test certificate' "$($cert.Subject) / thumbprint $thumbprint / valid until $($cert.NotAfter.ToString('yyyy-MM-dd'))"
