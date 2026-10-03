@@ -167,6 +167,7 @@ func (s *server) status(w http.ResponseWriter, r *http.Request) {
 	}
 	if current, err := user.Current(); err == nil {
 		body["user"] = current.Username
+		body["sid"] = current.Uid // S-1-5-18 is SYSTEM
 	}
 	if info, err := queryDesktop(0); err != nil {
 		body["screen_error"] = err.Error()

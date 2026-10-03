@@ -54,6 +54,35 @@ public static class Probe
     public static bool IsDown(int key) { return (GetAsyncKeyState(key) & 0x8000) != 0; }
     public static string Screen() { return GetSystemMetrics(0) + "x" + GetSystemMetrics(1); }
     [DllImport("user32.dll")] public static extern bool BlockInput(bool block);
+
+    [DllImport("user32.dll")] static extern IntPtr WindowFromPoint(POINT p);
+    [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr window, uint flags);
+    [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr window);
+    [DllImport("user32.dll")] static extern bool SetWindowPos(IntPtr window, IntPtr after, int x, int y, int cx, int cy, uint flags);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetWindowTextW(IntPtr window, System.Text.StringBuilder text, int max);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassNameW(IntPtr window, System.Text.StringBuilder text, int max);
+    [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr window, out uint pid);
+
+    static string Describe(IntPtr window)
+    {
+        if (window == IntPtr.Zero) return "(none)";
+        var title = new System.Text.StringBuilder(200); var cls = new System.Text.StringBuilder(200); uint pid;
+        GetWindowTextW(window, title, 200); GetClassNameW(window, cls, 200); GetWindowThreadProcessId(window, out pid);
+        return "'" + title + "' [" + cls + "] pid " + pid;
+    }
+    // The top-level window that would receive a click at this point.
+    public static string WindowAt(int x, int y)
+    {
+        POINT p; p.X = x; p.Y = y;
+        return Describe(GetAncestor(WindowFromPoint(p), 2));
+    }
+    public static string Foreground() { return Describe(GetForegroundWindow()); }
+    public static void BringToFront(IntPtr window)
+    {
+        SetWindowPos(window, new IntPtr(-1), 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0040); // topmost; keep size and place; show
+        SetForegroundWindow(window);
+    }
 }
 '@
 
@@ -66,7 +95,7 @@ function Get-InputDevices {
 }
 
 # --- a window on the desktop that records what arrives ---------------------------------------
-$ui = [hashtable]::Synchronized(@{ Ready = $false; Close = $false; Down = 0; RightDown = 0; Double = 0; Wheel = 0; Text = '' })
+$ui = [hashtable]::Synchronized(@{ Ready = $false; Close = $false; Down = 0; RightDown = 0; Double = 0; Wheel = 0; Text = ''; Events = ''; Errors = '' })
 $runspace = [runspacefactory]::CreateRunspace()
 $runspace.ApartmentState = 'STA'
 $runspace.ThreadOptions = 'ReuseThread'
@@ -92,15 +121,20 @@ $window.Runspace = $runspace
     $box.Location = New-Object System.Drawing.Point(20, 190)
     $box.Size = New-Object System.Drawing.Size(380, 30)
 
-    $pad.Add_MouseDown({ param($sender, $e)
-        if ($e.Button -eq [System.Windows.Forms.MouseButtons]::Left) { $ui.Down++ }
-        if ($e.Button -eq [System.Windows.Forms.MouseButtons]::Right) { $ui.RightDown++ }
+    # Handlers use $_ (the event's arguments) and never let an error escape into the window's message loop.
+    $pad.Add_MouseDown({
+        try {
+            $ui.Events += "down:$($_.Button) "
+            if ($_.Button -eq [System.Windows.Forms.MouseButtons]::Left) { $ui.Down++ }
+            if ($_.Button -eq [System.Windows.Forms.MouseButtons]::Right) { $ui.RightDown++ }
+        } catch { $ui.Errors += "MouseDown: $($_.Exception.Message); " }
     })
-    $pad.Add_MouseDoubleClick({ $ui.Double++ })
-    $wheel = { param($sender, $e) $ui.Wheel += $e.Delta }
+    $pad.Add_MouseDoubleClick({ try { $ui.Events += 'double '; $ui.Double++ } catch { $ui.Errors += "DoubleClick: $($_.Exception.Message); " } })
+    $wheel = { try { $ui.Events += "wheel:$($_.Delta) "; $ui.Wheel += $_.Delta } catch { $ui.Errors += "Wheel: $($_.Exception.Message); " } }
     $form.Add_MouseWheel($wheel)
     $pad.Add_MouseWheel($wheel)
-    $box.Add_TextChanged({ $ui.Text = $box.Text })
+    $box.Add_MouseWheel($wheel)
+    $box.Add_TextChanged({ try { $ui.Text = $box.Text } catch { $ui.Errors += "TextChanged: $($_.Exception.Message); " } })
 
     $form.Controls.Add($pad)
     $form.Controls.Add($box)
@@ -114,6 +148,8 @@ $window.Runspace = $runspace
         $p = $pad.PointToScreen((New-Object System.Drawing.Point(190, 70)))
         $b = $box.PointToScreen((New-Object System.Drawing.Point(190, 10)))
         $ui.PadX = $p.X; $ui.PadY = $p.Y; $ui.BoxX = $b.X; $ui.BoxY = $b.Y
+        $ui.Handle = $form.Handle
+        $ui.Bounds = "$($form.Bounds)"
         $form.Activate()
         $ui.Ready = $true
     })
@@ -127,6 +163,31 @@ if (-not (Wait-Until { $ui.Ready } 20)) {
     exit 1
 }
 Add-Report "- test window on the desktop: click area centre ($($ui.PadX),$($ui.PadY)), text box ($($ui.BoxX),$($ui.BoxY)); screen $([Probe]::Screen())"
+
+function Save-Desktop {
+    # A picture of the desktop, to see what the test saw.
+    param([string]$Name)
+    try {
+        Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+        $bounds = [System.Windows.Forms.SystemInformation]::VirtualScreen
+        $bitmap = [System.Drawing.Bitmap]::new($bounds.Width, $bounds.Height)
+        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+        $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+        $bitmap.Save((Join-Path $LogDir $Name), [System.Drawing.Imaging.ImageFormat]::Png)
+        $graphics.Dispose(); $bitmap.Dispose()
+    } catch {
+        Add-Report "- screenshot failed: $($_.Exception.Message)"
+    }
+}
+
+function Show-TestWindow {
+    # Puts the test window in front and says what a click at the test points would hit.
+    [Probe]::BringToFront([IntPtr]$ui.Handle)
+    Start-Sleep -Milliseconds 300
+    Add-Report "- window $($ui.Bounds); at the click point: $([Probe]::WindowAt($ui.PadX, $ui.PadY)); at the text box: $([Probe]::WindowAt($ui.BoxX, $ui.BoxY)); in front: $([Probe]::Foreground())"
+}
+Show-TestWindow
+Save-Desktop '64-http-desktop-before.png'
 
 # --- the checks that are the same for both ways of starting the program ----------------------
 function Test-Api {
@@ -228,6 +289,8 @@ $up = Wait-Until { (Invoke-Api '/status').ok } 15
 Check 'start' $up "pid $($first.Id)"
 if ($up) {
     $status = Test-Api 'admin:'
+    Add-Report "- the window recorded: $($ui.Events)$(if ($ui.Errors) { " errors: $($ui.Errors)" })"
+    Save-Desktop '65-http-desktop-after-admin.png'
     $withOne = @(Get-InputDevices | Where-Object { $_ -notin $baseline }).Count
     Check 'devices created' ($withOne -gt 0) "$withOne new device entries in Windows"
 
@@ -261,11 +324,15 @@ $log = Join-Path $LogDir '63-http-system.log'
 & schtasks.exe /run /tn $taskName 2>&1 | Out-Host
 $up = Wait-Until { (Invoke-Api '/status').ok } 20
 Check 'start' $up 'started through a scheduled task that runs as SYSTEM'
+$ui.Events = ''
+Show-TestWindow
 if ($up) {
     $status = Test-Api 'SYSTEM:'
+    Add-Report "- the window recorded: $($ui.Events)$(if ($ui.Errors) { " errors: $($ui.Errors)" })"
+    # S-1-5-18 is the SYSTEM account; its name shows up as the machine account (NAME$).
     Check 'really SYSTEM and really outside the desktop session' `
-        ($status.user -match 'SYSTEM' -and $status.session -eq 0 -and -not $status.in_console_session) `
-        "user=$($status.user), session=$($status.session), in the desktop session=$($status.in_console_session)"
+        ($status.sid -eq 'S-1-5-18' -and $status.session -eq 0 -and -not $status.in_console_session) `
+        "user=$($status.user) ($($status.sid)), session=$($status.session), in the desktop session=$($status.in_console_session)"
     [void](Invoke-Api '/quit')
     $gone = Wait-Until { @(Get-InputDevices | Where-Object { $_ -notin $baseline }).Count -eq 0 } 15
     Check '/quit removes the devices' $gone "leftover device entries: $(@(Get-InputDevices | Where-Object { $_ -notin $baseline }).Count)"
