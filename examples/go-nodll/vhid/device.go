@@ -10,12 +10,17 @@
 // The driver only lets administrators (and SYSTEM) create devices, so the calling process
 // must run elevated. A device exists for as long as it is open: Close it, or let the process
 // end, and it disappears from Windows.
+//
+// No call waits on the driver for longer than IOTimeout: a request that is not answered in
+// time is cancelled and reported as ErrTimeout, so a caller can never hang inside this package.
 package vhid
 
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"syscall"
+	"time"
 	"unsafe"
 )
 
@@ -77,7 +82,15 @@ var (
 	ErrDriverNotInstalled = errors.New("the WinUHid driver is not installed")
 	// ErrAccessDenied means the process is not elevated; only administrators may create devices.
 	ErrAccessDenied = errors.New("access denied: only administrators may create virtual devices")
+	// ErrTimeout means the driver did not answer a request within IOTimeout.
+	ErrTimeout = errors.New("the driver did not answer in time")
+	// ErrStuck means an earlier request could neither be completed nor cancelled. The device
+	// refuses further use; close it and create a new one.
+	ErrStuck = errors.New("the device is stuck on an earlier request")
 )
+
+// IOTimeout is the longest any single exchange with the driver may take.
+var IOTimeout = 2 * time.Second
 
 // wrap names the failed step and maps the two common causes to the errors above.
 func wrap(step string, err error) error {
@@ -99,24 +112,102 @@ func openControlDevice() (syscall.Handle, error) {
 	if err != nil {
 		return syscall.InvalidHandle, err
 	}
+	// Overlapped, so that a request can be given up on instead of blocking forever.
 	handle, err := syscall.CreateFile(path,
 		syscall.GENERIC_READ|syscall.GENERIC_WRITE,
 		syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE|syscall.FILE_SHARE_DELETE,
-		nil, syscall.OPEN_EXISTING, 0, 0)
+		nil, syscall.OPEN_EXISTING, syscall.FILE_FLAG_OVERLAPPED, 0)
 	if err != nil {
 		return syscall.InvalidHandle, wrap("open "+controlDevicePath, err)
 	}
 	return handle, nil
 }
 
-// control sends one command, with optional input data, to the driver.
-func control(handle syscall.Handle, code uint32, input []byte) error {
-	var in *byte
-	if len(input) > 0 {
-		in = &input[0]
+// request is the memory one exchange with the driver uses. It lives on the heap and is kept
+// until the driver has let go of it, because the driver may touch it for as long as the
+// exchange is pending.
+type request struct {
+	overlapped syscall.Overlapped
+	done       uint32
+	in, out    []byte
+}
+
+// abandoned keeps requests the driver neither completed nor cancelled, so their memory stays valid.
+var abandoned struct {
+	sync.Mutex
+	requests []*request
+}
+
+var (
+	kernel32                = syscall.NewLazyDLL("kernel32.dll")
+	procCreateEventW        = kernel32.NewProc("CreateEventW")
+	procGetOverlappedResult = kernel32.NewProc("GetOverlappedResult")
+)
+
+// result collects the outcome of a request that has finished.
+func (r *request) result(handle syscall.Handle) error {
+	ok, _, callErr := procGetOverlappedResult.Call(uintptr(handle), uintptr(unsafe.Pointer(&r.overlapped)), uintptr(unsafe.Pointer(&r.done)), 0)
+	if ok == 0 {
+		return callErr
 	}
-	var returned uint32
-	return syscall.DeviceIoControl(handle, code, in, uint32(len(input)), nil, 0, &returned, nil)
+	return nil
+}
+
+// exchange runs one request and waits for it for at most IOTimeout.
+// stuck is true when the request could not even be cancelled.
+func exchange(handle syscall.Handle, in []byte, outSize int, start func(r *request) error) (out []byte, stuck bool, err error) {
+	event, _, callErr := procCreateEventW.Call(0, 1, 0, 0) // manual reset, not signalled
+	if event == 0 {
+		return nil, false, callErr
+	}
+	r := &request{in: append([]byte(nil), in...), out: make([]byte, outSize)}
+	r.overlapped.HEvent = syscall.Handle(event)
+
+	err = start(r)
+	if err == nil { // answered at once
+		syscall.CloseHandle(r.overlapped.HEvent)
+		return r.out, false, nil
+	}
+	if !errors.Is(err, syscall.ERROR_IO_PENDING) {
+		syscall.CloseHandle(r.overlapped.HEvent)
+		return nil, false, err
+	}
+
+	const signalled = 0 // WAIT_OBJECT_0
+	if waited, _ := syscall.WaitForSingleObject(r.overlapped.HEvent, uint32(IOTimeout/time.Millisecond)); waited != signalled {
+		// Too slow: take the request back, and give the driver a moment to hand it over.
+		syscall.CancelIoEx(handle, &r.overlapped)
+		if waited, _ = syscall.WaitForSingleObject(r.overlapped.HEvent, 1000); waited != signalled {
+			abandoned.Lock()
+			abandoned.requests = append(abandoned.requests, r)
+			abandoned.Unlock()
+			return nil, true, ErrTimeout
+		}
+		if r.result(handle) != nil {
+			syscall.CloseHandle(r.overlapped.HEvent)
+			return nil, false, ErrTimeout
+		}
+		// It finished just before the cancellation took effect.
+	} else if err := r.result(handle); err != nil {
+		syscall.CloseHandle(r.overlapped.HEvent)
+		return nil, false, err
+	}
+	syscall.CloseHandle(r.overlapped.HEvent)
+	return r.out, false, nil
+}
+
+func firstByte(b []byte) *byte {
+	if len(b) == 0 {
+		return nil
+	}
+	return &b[0]
+}
+
+// control sends one command, with optional input data, to the driver and returns its answer.
+func control(handle syscall.Handle, code uint32, input []byte, outSize int) (out []byte, stuck bool, err error) {
+	return exchange(handle, input, outSize, func(r *request) error {
+		return syscall.DeviceIoControl(handle, code, firstByte(r.in), uint32(len(r.in)), firstByte(r.out), uint32(len(r.out)), &r.done, &r.overlapped)
+	})
 }
 
 // DriverInterfaceVersion returns the interface version of the installed driver (currently 1).
@@ -128,13 +219,11 @@ func DriverInterfaceVersion() (uint32, error) {
 	}
 	defer syscall.CloseHandle(handle)
 
-	var version, returned uint32
-	err = syscall.DeviceIoControl(handle, ioctlGetInterfaceVersion, nil, 0,
-		(*byte)(unsafe.Pointer(&version)), uint32(unsafe.Sizeof(version)), &returned, nil)
+	out, _, err := control(handle, ioctlGetInterfaceVersion, nil, 4)
 	if err != nil {
 		return 0, wrap("query driver interface version", err)
 	}
-	return version, nil
+	return uint32(out[0]) | uint32(out[1])<<8 | uint32(out[2])<<16 | uint32(out[3])<<24, nil
 }
 
 // Config describes a device for CreateDevice.
@@ -153,7 +242,9 @@ type Config struct {
 // Device is a virtual, input-only HID device. Keyboard and Mouse are built on it; use it
 // directly to make any other input-only device from a report descriptor.
 type Device struct {
+	mu     sync.Mutex
 	handle syscall.Handle
+	stuck  bool
 }
 
 // CreateDevice creates the device and makes it appear in Windows.
@@ -192,7 +283,7 @@ func CreateDevice(config Config) (*Device, error) {
 		{"start device", ioctlStartDevice, nil},
 	}
 	for _, step := range steps {
-		if err := control(handle, step.code, step.input); err != nil {
+		if _, _, err := control(handle, step.code, step.input, 0); err != nil {
 			syscall.CloseHandle(handle)
 			return nil, wrap(step.name, err)
 		}
@@ -202,15 +293,27 @@ func CreateDevice(config Config) (*Device, error) {
 
 // SubmitInputReport sends one input report. Its length must be exactly what the report
 // descriptor defines; if the descriptor uses report IDs, the ID is the first byte.
+//
+// It returns within IOTimeout plus a moment: ErrTimeout if the driver was too slow, and
+// ErrStuck from then on if that request could not be taken back.
 func (d *Device) SubmitInputReport(report []byte) error {
-	if d.handle == syscall.InvalidHandle {
-		return errors.New("vhid: the device is closed")
-	}
 	if len(report) == 0 {
 		return errors.New("vhid: empty report")
 	}
-	var written uint32
-	if err := syscall.WriteFile(d.handle, report, &written, nil); err != nil {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	if d.handle == syscall.InvalidHandle {
+		return errors.New("vhid: the device is closed")
+	}
+	if d.stuck {
+		return ErrStuck
+	}
+	handle := d.handle
+	_, stuck, err := exchange(handle, report, 0, func(r *request) error {
+		return syscall.WriteFile(handle, r.in, &r.done, &r.overlapped)
+	})
+	d.stuck = stuck
+	if err != nil {
 		return wrap("submit input report", err)
 	}
 	return nil
@@ -218,6 +321,8 @@ func (d *Device) SubmitInputReport(report []byte) error {
 
 // Close removes the device from Windows. The Device must not be used afterwards.
 func (d *Device) Close() error {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.handle == syscall.InvalidHandle {
 		return nil
 	}
