@@ -145,9 +145,9 @@ $window.Runspace = $runspace
     })
     $pad.Add_MouseDoubleClick({ try { $ui.Events += 'double '; $ui.Double++ } catch { $ui.Errors += "DoubleClick: $($_.Exception.Message); " } })
     $wheel = { try { $ui.Events += "wheel:$($_.Delta) "; $ui.Wheel += $_.Delta } catch { $ui.Errors += "Wheel: $($_.Exception.Message); " } }
+    # On the form only: a wheel turn over a control is passed on to the form, so listening on
+    # both would count it twice.
     $form.Add_MouseWheel($wheel)
-    $pad.Add_MouseWheel($wheel)
-    $box.Add_MouseWheel($wheel)
     $box.Add_TextChanged({ try { $ui.Text = $box.Text } catch { $ui.Errors += "TextChanged: $($_.Exception.Message); " } })
 
     $form.Controls.Add($pad)
