@@ -33,6 +33,8 @@ const (
 //	     read, or the program was still busy with an earlier request.
 const (
 	busyLimit    = 3 * time.Second        // how long a request waits for an earlier one to finish
+	typeLimit    = 256                    // characters one /type request may carry
+	keysLimit    = 8                      // keys one combination may name
 	arriveLimit  = 400 * time.Millisecond // how long the pointer is given to arrive
 	arriveMargin = 1                      // pixels of tolerance when checking where it arrived
 )
@@ -287,6 +289,10 @@ func (s *server) key(action string) http.HandlerFunc {
 			badRequest(w, err.Error())
 			return
 		}
+		if len(keys) > keysLimit {
+			badRequest(w, fmt.Sprintf("at most %d keys in one combination", keysLimit))
+			return
+		}
 		err = s.exclusively(func() error {
 			if action != "up" { // "down" and "tap" press, in the order given
 				for _, key := range keys {
@@ -313,9 +319,17 @@ func (s *server) key(action string) http.HandlerFunc {
 
 func (s *server) typeText(w http.ResponseWriter, r *http.Request) {
 	text := r.PathValue("text")
+	if len([]rune(text)) > typeLimit {
+		badRequest(w, fmt.Sprintf("at most %d characters per request", typeLimit))
+		return
+	}
 	typed, skipped := 0, 0
 	err := s.exclusively(func() error {
 		for _, character := range text {
+			if r.Context().Err() != nil { // the caller has gone away: stop typing
+				s.keyboard.ReleaseAll()
+				return errors.New("the request was abandoned by the caller")
+			}
 			key, shift, ok := vhid.KeyForRune(character)
 			if !ok {
 				skipped++

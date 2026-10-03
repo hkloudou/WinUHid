@@ -148,6 +148,10 @@ Add-Report '```'
 Add-Notice 'Go sample without DLLs' "exit code $rc; pass=$(@($goNoDll -match '^\[PASS\]').Count), warn=$(@($goNoDll -match '^\[WARN\]').Count), fail=$(@($goNoDll -match '^\[FAIL\]').Count)"
 if ($rc -ne 0) { $failed = $true }
 
+# --- 2d. HTTP reference server, as administrator and as SYSTEM ------------------------------
+& "$PSScriptRoot/http-sample-test.ps1"
+if ($LASTEXITCODE -ne 0) { $failed = $true }
+
 # --- 3. Evidence for diagnosis --------------------------------------------------------------
 $setupLog = 'C:\Windows\INF\setupapi.dev.log'
 if (Test-Path $setupLog) {

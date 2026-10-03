@@ -44,6 +44,8 @@ include\                   C/C++ 头文件
 examples\go\               Go 示例（调用两个 DLL）：源码和 winuhid-sample.exe
 examples\go-nodll\         Go 示例（不带任何 DLL，直接和驱动对话）：
                            源码和 winuhid-nodll-sample.exe
+                           winuhid-http.exe 是用网址操作键盘鼠标的参考程序，
+                           说明在 httpserver\README.md
                            两个示例的用法见各自目录下的 README.md
 
 说明

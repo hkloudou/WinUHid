@@ -18,11 +18,15 @@ function Check {
 }
 
 function Invoke-Api {
+    # Returns the JSON answer with the HTTP status code added as .status (0 = no answer at all).
     param([string]$Path)
     try {
-        Invoke-RestMethod -Uri "$base$Path" -TimeoutSec 15 -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri "$base$Path" -TimeoutSec 15 -SkipHttpErrorCheck -ErrorAction Stop
+        $answer = $response.Content | ConvertFrom-Json
+        $answer | Add-Member -NotePropertyName status -NotePropertyValue ([int]$response.StatusCode) -Force
+        $answer
     } catch {
-        [pscustomobject]@{ ok = $false; error = $_.Exception.Message }
+        [pscustomobject]@{ ok = $false; status = 0; error = $_.Exception.Message }
     }
 }
 
@@ -49,6 +53,7 @@ public static class Probe
     public static string Cursor() { POINT p; return GetCursorPos(out p) ? p.X + "," + p.Y : "none"; }
     public static bool IsDown(int key) { return (GetAsyncKeyState(key) & 0x8000) != 0; }
     public static string Screen() { return GetSystemMetrics(0) + "x" + GetSystemMetrics(1); }
+    [DllImport("user32.dll")] public static extern bool BlockInput(bool block);
 }
 '@
 
@@ -178,6 +183,31 @@ function Test-Api {
     [void](Invoke-Api '/key/up/shift'); Start-Sleep -Milliseconds 300
     $released = -not [Probe]::IsDown(0xA0)
     Check "$Label /key/down/shift + /key/up/shift" ($held -and $released) "Left Shift held=$held, then released=$released"
+
+    # Error feedback. A URL that makes no sense must be refused...
+    $r = Invoke-Api '/mouse/move/abc/1'
+    Check "$Label nonsense URL is refused" ($r.status -eq 400) "HTTP $($r.status): $($r.error)"
+
+    # ...and input that is sent but has no effect must be reported, promptly, not retried forever.
+    # Windows is told to ignore all keyboard and mouse input for a moment to create that situation.
+    [void](Invoke-Api "/mouse/move/$px/$py"); Start-Sleep -Milliseconds 300
+    $here = [Probe]::Cursor()
+    $blocked = [Probe]::BlockInput($true)
+    try {
+        $watch = [System.Diagnostics.Stopwatch]::StartNew()
+        $r = Invoke-Api "/mouse/click/$($px + 40)/$py"
+        $watch.Stop()
+        $stayed = ([Probe]::Cursor() -eq $here)
+    } finally {
+        [void][Probe]::BlockInput($false)
+    }
+    if ($blocked -and $stayed) {
+        Check "$Label input without effect is reported" ($r.status -eq 403 -and $watch.ElapsedMilliseconds -lt 5000) `
+            "with input blocked: HTTP $($r.status) after $($watch.ElapsedMilliseconds) ms: $($r.error)"
+    } else {
+        Add-Report "- [INFO] $Label input-without-effect check skipped: input could not be blocked on this machine (blocked=$blocked, pointer stayed=$stayed, HTTP $($r.status))"
+    }
+    Start-Sleep -Milliseconds 300
 
     [void](Invoke-Api "/mouse/move/$px/$py"); Start-Sleep -Milliseconds 300
     $status = Invoke-Api '/status'

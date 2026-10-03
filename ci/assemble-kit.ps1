@@ -18,7 +18,7 @@ Get-ChildItem -Path (Join-Path $RepoRoot 'WinUHidDevs') -Filter 'WinUHid*.h' |
 
 # Go samples: source plus ready-built programs, so they can be tried without installing Go.
 #   go        calls WinUHid.dll and WinUHidDevs.dll
-#   go-nodll  talks to the driver directly and needs no DLL
+#   go-nodll  talks to the driver directly and needs no DLL; it also holds the HTTP reference server
 $env:CGO_ENABLED = '0'
 $env:GOOS = 'windows'
 $env:GOARCH = 'amd64'
@@ -36,6 +36,10 @@ foreach ($sample in @{ Dir = 'go'; Exe = 'winuhid-sample.exe' }, @{ Dir = 'go-no
         if ($LASTEXITCODE -ne 0) { throw "go test failed for examples\$($sample.Dir)." }
         & go build -trimpath -o (Join-Path $dst $sample.Exe) . | Out-Host
         if ($LASTEXITCODE -ne 0) { throw "go build failed for examples\$($sample.Dir)." }
+        if (Test-Path 'httpserver') {
+            & go build -trimpath -o (Join-Path $dst 'winuhid-http.exe') ./httpserver | Out-Host
+            if ($LASTEXITCODE -ne 0) { throw "go build failed for examples\$($sample.Dir)\httpserver." }
+        }
     } finally {
         Pop-Location
     }
@@ -53,7 +57,8 @@ Add-Notice 'Go samples' "built with $goVersion"
 $required = 'WinUHid-dev-test-x64.msi', 'WinUHid-dev-test.cer', 'cert-thumbprint.txt', 'install.cmd', 'selftest.cmd',
             'selftest.ps1', 'uninstall.cmd', 'README.txt', 'lib\WinUHid.dll', 'lib\WinUHidDevs.dll', 'include\WinUHid.h',
             'examples\go\winuhid-sample.exe', 'examples\go\main.go', 'examples\go\winuhid\winuhid.go',
-            'examples\go-nodll\winuhid-nodll-sample.exe', 'examples\go-nodll\main.go', 'examples\go-nodll\vhid\device.go'
+            'examples\go-nodll\winuhid-nodll-sample.exe', 'examples\go-nodll\main.go', 'examples\go-nodll\vhid\device.go',
+            'examples\go-nodll\winuhid-http.exe', 'examples\go-nodll\httpserver\main.go'
 $missing = $required | Where-Object { -not (Test-Path (Join-Path $KitDir $_)) }
 if ($missing) { throw "Kit is incomplete, missing: $($missing -join ', ')" }
 

@@ -98,7 +98,13 @@ func run(address string) error {
 	time.Sleep(1500 * time.Millisecond)
 
 	// 3. Serve until asked to stop: /quit, Ctrl+C, the console window closing, or a service stop.
-	httpServer := &http.Server{Handler: s.routes(), ReadHeaderTimeout: 5 * time.Second}
+	httpServer := &http.Server{
+		Handler:           s.routes(),
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      60 * time.Second, // above the longest request: a full-length /type
+		IdleTimeout:       60 * time.Second,
+	}
 	serveError := make(chan error, 1)
 	go func() { serveError <- httpServer.Serve(listener) }()
 	log.Printf("listening on http://%s/  (no authentication: test use only)", listener.Addr())
@@ -117,9 +123,20 @@ func run(address string) error {
 	// 4. Remove the devices first and only then give up the address, so that a copy waiting
 	//    to take over never starts while the old devices still exist.
 	log.Printf("removing the virtual devices")
-	s.pointer.Close()
-	s.relative.Close()
-	s.keyboard.Close()
+	removed := make(chan struct{})
+	go func() {
+		s.pointer.Close()
+		s.relative.Close()
+		s.keyboard.Close()
+		close(removed)
+	}()
+	select {
+	case <-removed:
+	case <-time.After(5 * time.Second):
+		// Do not hang on exit either: when the process ends, Windows takes the devices away itself.
+		log.Printf("removing the devices is taking too long; exiting and leaving it to Windows")
+		os.Exit(1)
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	httpServer.Shutdown(ctx)
